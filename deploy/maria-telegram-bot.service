@@ -1,0 +1,18 @@
+[Unit]
+Description=Maria Telegram bot (astrologer)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=root
+WorkingDirectory=/opt/telegram-bot
+# Секреты и настройки — в файле /opt/telegram-bot/.env (см. deploy/env.example)
+EnvironmentFile=-/opt/telegram-bot/.env
+# Логи в bot.log (работает на любых версиях systemd)
+ExecStart=/bin/bash -c 'exec /opt/telegram-bot/venv/bin/python /opt/telegram-bot/main.py >> /opt/telegram-bot/bot.log 2>&1'
+Restart=always
+RestartSec=15
+
+[Install]
+WantedBy=multi-user.target

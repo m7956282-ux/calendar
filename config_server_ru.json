@@ -1,0 +1,133 @@
+{
+  "$schema": "https://schema.freqtrade.io/schema.json",
+  "user_data_dir": "c:/telegram-bot/freqtrade_test/user_data",
+  "logfile": "c:/telegram-bot/freqtrade_test/user_data/logs/freqtrade.log",
+  "max_open_trades": 10,
+  "stake_currency": "USDT",
+  "stake_amount": 120,
+  "tradable_balance_ratio": 0.99,
+  "fiat_display_currency": "USD",
+  "amount_reserve_percent": 0.05,
+  "available_capital": 2000,
+  "dry_run": true,
+  "dry_run_wallet": 2000,
+  "cancel_open_orders_on_exit": false,
+  "timeframe": "5m",
+  "trading_mode": "futures",
+  "margin_mode": "isolated",
+  "use_exit_signal": true,
+  "exit_profit_only": false,
+  "ignore_roi_if_entry_signal": false,
+  "minimal_roi": {
+    "0": 0.08
+  },
+  "stoploss": -0.04,
+  "trailing_stop": true,
+  "trailing_stop_positive": 0.02,
+  "trailing_stop_positive_offset": 0.03,
+  "trailing_only_offset_is_reached": true,
+  "unfilledtimeout": {
+    "entry": 10,
+    "exit": 10,
+    "exit_timeout_count": 0,
+    "unit": "minutes"
+  },
+  "entry_pricing": {
+    "price_side": "other",
+    "use_order_book": true,
+    "order_book_top": 1,
+    "price_last_balance": 0.0,
+    "check_depth_of_market": {
+      "enabled": false,
+      "bids_to_ask_delta": 1
+    }
+  },
+  "exit_pricing": {
+    "price_side": "same",
+    "use_order_book": true,
+    "order_book_top": 1
+  },
+  "order_types": {
+    "entry": "market",
+    "exit": "limit",
+    "emergency_exit": "market",
+    "force_exit": "market",
+    "force_entry": "market",
+    "stoploss": "market",
+    "stoploss_on_exchange": false,
+    "stoploss_price_type": "last",
+    "stoploss_on_exchange_interval": 60,
+    "stoploss_on_exchange_limit_ratio": 0.99
+  },
+  "order_time_in_force": {
+    "entry": "GTC",
+    "exit": "GTC"
+  },
+  "pairlists": [
+    {
+      "method": "VolumePairList",
+      "number_assets": 31,
+      "sort_key": "quoteVolume",
+      "min_value": 0,
+      "refresh_period": 1800
+    },
+    {
+      "method": "StaticPairList"
+    }
+  ],
+  "exchange": {
+    "name": "binance",
+    "key": "",
+    "secret": "",
+    "password": "",
+    "pair_whitelist": [
+      "ADA/USDT:USDT",
+      "AVAX/USDT:USDT",
+      "BNB/USDT:USDT",
+      "BTC/USDT:USDT",
+      "DOGE/USDT:USDT",
+      "DOT/USDT:USDT",
+      "ETH/USDT:USDT",
+      "LINK/USDT:USDT",
+      "LTC/USDT:USDT",
+      "SOL/USDT:USDT",
+      "TRX/USDT:USDT",
+      "XRP/USDT:USDT",
+      "ALGO/USDT:USDT",
+      "ATOM/USDT:USDT",
+      "ETC/USDT:USDT"
+    ],
+    "ccxt_config": {},
+    "ccxt_async_config": {}
+  },
+  "telegram": {
+    "enabled": true,
+    "token": "REDACTED_TELEGRAM_BOT_TOKEN",
+    "chat_id": "-5272054132"
+  },
+  "api_server": {
+    "enabled": true,
+    "listen_ip_address": "127.0.0.1",
+    "listen_port": 8080,
+    "verbosity": "error",
+    "enable_openapi": true,
+    "jwt_secret_key": "REDACTED_JWT_SECRET",
+    "CORS_origins": [],
+    "username": "freqtrader",
+    "password": "REDACTED_API_PASSWORD",
+    "ws_token": "REDACTED_WS_TOKEN"
+  },
+  "bot_name": "freqtrade",
+  "db_url": "sqlite:///user_data/tradesv3_ru.sqlite",
+  "initial_state": "running",
+  "force_entry_enable": false,
+  "internals": {
+    "process_throttle_secs": 5,
+    "heartbeat_interval": 60
+  },
+  "strategy": "SampleStrategy",
+  "strategy_path": "user_data/strategies/",
+  "recursive_strategy_search": false,
+  "dataformat_ohlcv": "feather",
+  "dataformat_trades": "feather"
+}

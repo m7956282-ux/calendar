@@ -1,0 +1,43 @@
+# Секреты и ключи
+.env
+.env.local
+*.env
+
+# Виртуальное окружение
+venv/
+.venv/
+env/
+
+# Данные бота (история чатов)
+data/
+*.db
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.so
+.Python
+*.egg-info/
+.eggs/
+dist/
+build/
+
+# Логи (если пишете в файл)
+*.log
+logs/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Heavy local datasets / test sandboxes
+freqtrade_test/
+freqtrade_vendor/
+passivbot_test/
+.cursor/
+tradesv3.dryrun.sqlite
+tradesv3.dryrun.sqlite-shm
+tradesv3.dryrun.sqlite-wal
