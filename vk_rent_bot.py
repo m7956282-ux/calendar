@@ -3,11 +3,15 @@ import os
 import re
 import sqlite3
 import time
+import json
+import base64
 from dataclasses import dataclass
 from datetime import datetime, timedelta, date, time as dtime, timezone
 from pathlib import Path
 from collections import defaultdict
 from typing import Dict, Optional
+from urllib import error as urlerror
+from urllib import request as urlrequest
 
 import vk_api
 from openai import (
@@ -27,7 +31,7 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
-BOT_VERSION = "2026-04-07-no-deepseek-plus-bank-label"
+BOT_VERSION = "2026-04-10-github-calendar-sync"
 
 
 VK_TOKEN = os.getenv(
@@ -64,6 +68,16 @@ DEEPSEEK_BASE_URL = os.getenv("DEEPSEEK_BASE_URL", "https://api.deepseek.com").s
 DEEPSEEK_MODEL = os.getenv("DEEPSEEK_MODEL", "deepseek-chat").strip()
 # Таймаут HTTP к API (сек.); при лагах на стороне DeepSeek можно поднять, напр. 120
 DEEPSEEK_TIMEOUT_SECONDS = float(os.getenv("DEEPSEEK_TIMEOUT_SECONDS", "90"))
+
+# GitHub calendar mirror (repo JSON for GitHub Pages)
+CALENDAR_GH_OWNER = os.getenv("CALENDAR_GH_OWNER", "").strip()
+CALENDAR_GH_REPO = os.getenv("CALENDAR_GH_REPO", "").strip()
+CALENDAR_GH_BRANCH = os.getenv("CALENDAR_GH_BRANCH", "main").strip() or "main"
+CALENDAR_GH_PATH = os.getenv("CALENDAR_GH_PATH", "data/bookings.json").strip() or "data/bookings.json"
+CALENDAR_GH_TOKEN = os.getenv("CALENDAR_GH_TOKEN", "").strip()
+CALENDAR_SYNC_PAST_DAYS = int(os.getenv("CALENDAR_SYNC_PAST_DAYS", "30"))
+CALENDAR_SYNC_FUTURE_DAYS = int(os.getenv("CALENDAR_SYNC_FUTURE_DAYS", "180"))
+CALENDAR_SYNC_TIMEOUT_SECONDS = float(os.getenv("CALENDAR_SYNC_TIMEOUT_SECONDS", "10"))
 
 
 def _get_db_connection() -> sqlite3.Connection:
@@ -147,6 +161,111 @@ def _init_db() -> None:
         _ensure_balance_minutes_column(conn)
     finally:
         conn.close()
+
+
+def _calendar_sync_enabled() -> bool:
+    return bool(CALENDAR_GH_OWNER and CALENDAR_GH_REPO and CALENDAR_GH_TOKEN)
+
+
+def _calendar_json_payload() -> dict:
+    """
+    Публичный JSON для GitHub Pages (без персональных данных пользователей).
+    """
+    now = datetime.now(timezone.utc).replace(tzinfo=None)
+    from_dt = now - timedelta(days=max(1, CALENDAR_SYNC_PAST_DAYS))
+    to_dt = now + timedelta(days=max(1, CALENDAR_SYNC_FUTURE_DAYS))
+    conn = _get_db_connection()
+    try:
+        cur = conn.cursor()
+        cur.execute(
+            """
+            SELECT start_ts, end_ts
+            FROM bookings
+            WHERE NOT (end_ts < ? OR start_ts > ?)
+            ORDER BY start_ts
+            """,
+            (from_dt.isoformat(), to_dt.isoformat()),
+        )
+        rows = cur.fetchall()
+    finally:
+        conn.close()
+    bookings: list[dict] = []
+    for r in rows:
+        s = _parse_booking_ts(r["start_ts"])
+        e = _parse_booking_ts(r["end_ts"])
+        bookings.append(
+            {
+                "start_ts": s.isoformat(),
+                "end_ts": e.isoformat(),
+                "duration_minutes": int((e - s).total_seconds() // 60),
+            }
+        )
+    return {
+        "generated_at": datetime.now(timezone.utc).isoformat(),
+        "timezone": "UTC",
+        "source": "vk_rent_bot",
+        "from_ts": from_dt.isoformat(),
+        "to_ts": to_dt.isoformat(),
+        "bookings": bookings,
+    }
+
+
+def _github_api_request(method: str, url: str, body: Optional[dict] = None) -> dict:
+    headers = {
+        "Accept": "application/vnd.github+json",
+        "Authorization": f"Bearer {CALENDAR_GH_TOKEN}",
+        "X-GitHub-Api-Version": "2022-11-28",
+        "User-Agent": "vk-rent-bot-calendar-sync",
+    }
+    data = None
+    if body is not None:
+        data = json.dumps(body, ensure_ascii=False).encode("utf-8")
+        headers["Content-Type"] = "application/json; charset=utf-8"
+    req = urlrequest.Request(url=url, data=data, headers=headers, method=method)
+    with urlrequest.urlopen(req, timeout=CALENDAR_SYNC_TIMEOUT_SECONDS) as resp:
+        raw = resp.read().decode("utf-8")
+        return json.loads(raw) if raw else {}
+
+
+def _sync_calendar_json_to_github(reason: str = "") -> None:
+    """
+    Обновляет data/bookings.json в GitHub-репозитории.
+    Вызывается после добавления/удаления брони.
+    """
+    if not _calendar_sync_enabled():
+        return
+    try:
+        payload = _calendar_json_payload()
+        json_bytes = json.dumps(payload, ensure_ascii=False, indent=2).encode("utf-8")
+        content_b64 = base64.b64encode(json_bytes).decode("ascii")
+        api_url = (
+            f"https://api.github.com/repos/{CALENDAR_GH_OWNER}/{CALENDAR_GH_REPO}/contents/{CALENDAR_GH_PATH}"
+        )
+        sha = None
+        try:
+            existing = _github_api_request("GET", f"{api_url}?ref={CALENDAR_GH_BRANCH}")
+            sha = existing.get("sha")
+        except urlerror.HTTPError as e:
+            if e.code != 404:
+                raise
+        commit_body = {
+            "message": f"sync calendar: {reason or 'bookings update'}",
+            "content": content_b64,
+            "branch": CALENDAR_GH_BRANCH,
+        }
+        if sha:
+            commit_body["sha"] = sha
+        _github_api_request("PUT", api_url, commit_body)
+        logger.info(
+            "GitHub calendar sync ok (%s/%s, path=%s, reason=%s, items=%s)",
+            CALENDAR_GH_OWNER,
+            CALENDAR_GH_REPO,
+            CALENDAR_GH_PATH,
+            reason or "-",
+            len(payload.get("bookings", [])),
+        )
+    except Exception as e:
+        logger.warning("GitHub calendar sync failed (%s): %s", reason or "-", e)
 
 
 def _ensure_balance_minutes_column(conn: sqlite3.Connection) -> None:
@@ -423,6 +542,7 @@ def _add_booking(user_id: int, start_dt: datetime, end_dt: datetime) -> None:
         conn.commit()
     finally:
         conn.close()
+    _sync_calendar_json_to_github("add_booking")
 
 
 def _get_user_hours(user_id: int) -> float:
@@ -597,6 +717,7 @@ def _delete_booking(booking_id: int) -> None:
         conn.commit()
     finally:
         conn.close()
+    _sync_calendar_json_to_github("delete_booking")
 
 
 def _get_booking_by_id(booking_id: int) -> Optional[sqlite3.Row]:
@@ -2278,6 +2399,29 @@ def handle_main_menu(vk, user_id: int, text_raw: str) -> None:
         send_message(vk, user_id, report, keyboard=_main_keyboard_for(user_id))
         return
 
+    if user_id in ADMIN_VK_IDS and text in (
+        "синк календаря",
+        "синхронизировать календарь",
+        "sync calendar",
+    ):
+        if not _calendar_sync_enabled():
+            send_message(
+                vk,
+                user_id,
+                "Синк календаря в GitHub не настроен.\n"
+                "Нужны переменные: CALENDAR_GH_OWNER, CALENDAR_GH_REPO, CALENDAR_GH_TOKEN.",
+                keyboard=_main_keyboard_for(user_id),
+            )
+            return
+        _sync_calendar_json_to_github("admin_manual_sync")
+        send_message(
+            vk,
+            user_id,
+            "Запустила ручную синхронизацию календаря в GitHub.",
+            keyboard=_main_keyboard_for(user_id),
+        )
+        return
+
     # Список админ-команд (текстом) + панель кнопок
     if user_id in ADMIN_VK_IDS and any(kw in text for kw in ("команды", "/admin")):
         send_message(
@@ -2295,6 +2439,7 @@ def handle_main_menu(vk, user_id: int, text_raw: str) -> None:
             "• ➖ удалить часы — пошагово списать часы у клиента\n"
             "• участники — все участники бота (имена и кликабельные ссылки vk.com/id…)\n"
             "• 📊 бонусы по кодам — кто чей код ввёл, начисленные бонусы\n"
+            "• синк календаря — ручной пуш data/bookings.json в GitHub\n"
             "• ➕ добавить часы — ID, никнейм, @ник или ссылка, затем сколько часов добавить (дробь 1,5; или отрицательное — списать)\n"
             "• отменить бронирование клиента — ID, никнейм, @ник или ссылка, "
             "затем номер записи (за 24 ч и более часы возвращаются клиенту, менее 24 ч — нет)\n\n"
@@ -2649,6 +2794,7 @@ def handle_message(vk, event) -> None:
             "• ➖ удалить часы — пошагово списать часы у клиента\n"
             "• участники — все участники бота (имена и кликабельные ссылки vk.com/id…)\n"
             "• 📊 бонусы по кодам — кто чей код ввёл и какие были начисления\n"
+            "• синк календаря — ручной пуш data/bookings.json в GitHub\n"
             "• ➕ добавить часы — пошагово начислить или списать часы у клиента (дробные часы можно)\n\n"
             "Остальные функции доступны через кнопки меню.\n\n"
             "Ниже — те же действия кнопками; «⬅ Главное меню» вернёт обычное меню.",

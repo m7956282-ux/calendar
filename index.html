@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Календарь занятости кабинета</title>
+  <style>
+    :root{--bg:#f5f6fb;--card:#fff;--text:#1b1f31;--muted:#6f7894;--line:#e5e9f4;--event:#dfe7ff;--event-border:#7b8fff;--hour-h:52px;}
+    *{box-sizing:border-box;}
+    body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Arial,sans-serif;}
+    .wrap{max-width:1320px;margin:0 auto;padding:14px;}
+    h1{margin:0 0 6px;font-size:28px;font-weight:700;}
+    .muted{color:var(--muted);margin-bottom:10px;}
+    .controls{display:flex;gap:8px;align-items:end;flex-wrap:wrap;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px;margin-bottom:10px;}
+    .controls label{display:grid;gap:4px;font-size:12px;color:#556089;}
+    .controls input,.controls button{padding:8px 10px;border-radius:10px;border:1px solid #d5dcef;background:#fff;}
+    .controls button{cursor:pointer;font-weight:600;}
+    .btn-primary{background:#1f6fff;color:#fff;border-color:#1f6fff;}
+    .btn-secondary{background:#fff;color:#334;}
+    .view-switch{display:flex;gap:6px;}
+    .view-switch button.active{background:#1f6fff;color:#fff;border-color:#1f6fff;}
+    .address{font-size:14px;color:#334;margin:6px 0 10px;}
+    .calendar-shell{background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:auto;}
+    .week{min-width:980px;border-top:1px solid var(--line);}
+    .week:first-child{border-top:none;}
+    .week-title{padding:10px 12px;border-bottom:1px solid var(--line);font-weight:600;color:#4c5677;background:#fafbff;}
+    .grid-head{display:grid;grid-template-columns:64px repeat(7,1fr);border-bottom:1px solid var(--line);position:sticky;top:0;background:#fff;z-index:2;}
+    .grid-head .corner{border-right:1px solid var(--line);}
+    .day-col-head{padding:8px 6px;border-right:1px solid var(--line);text-align:center;}
+    .day-col-head:last-child{border-right:none;}
+    .day-col-head .d{font-size:13px;color:var(--muted);}
+    .day-col-head .n{font-size:16px;font-weight:700;}
+    .day-col-head.today{background:#f0f5ff;}
+    .grid-body{position:relative;display:grid;grid-template-columns:64px repeat(7,1fr);height:calc(var(--hour-h) * 24);}
+    .times{position:relative;border-right:1px solid var(--line);}
+    .time-label{position:absolute;right:8px;transform:translateY(-50%);font-size:11px;color:#9aa3bf;}
+    .day-col{position:relative;border-right:1px solid var(--line);}
+    .day-col:last-child{border-right:none;}
+    .line-hour{position:absolute;left:0;right:0;border-top:1px solid #e9edf7;}
+    .line-quarter{position:absolute;left:0;right:0;border-top:1px dashed #f1f4fb;}
+    .event{position:absolute;left:6px;right:6px;background:var(--event);border:1px solid var(--event-border);border-radius:10px;padding:5px 6px;overflow:hidden;box-shadow:0 2px 6px rgba(69,93,187,.15);}
+    .event .t{font-size:12px;font-weight:700;}
+    .event .s{font-size:11px;color:#4f5b85;margin-top:2px;}
+    .empty-day{position:absolute;left:8px;right:8px;top:8px;font-size:12px;color:#98a3c2;}
+    @media (max-width:760px){h1{font-size:22px}.wrap{padding:10px}.controls{display:grid;grid-template-columns:1fr 1fr}.view-switch{grid-column:1/-1}.calendar-shell{border-radius:10px}.week{min-width:860px}}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>Календарь занятости кабинета</h1>
+    <div class="muted">Недельная сетка, шаг 15 минут.</div>
+    <div class="address"><b>Адрес кабинета:</b> Пушкинская 268</div>
+    <div class="controls">
+      <label>С даты <input id="dateFrom" type="date"></label>
+      <label>По дату <input id="dateTo" type="date"></label>
+      <button id="prevBtn" class="btn-secondary">←</button>
+      <button id="nextBtn" class="btn-secondary">→</button>
+      <button id="todayBtn" class="btn-secondary">Сегодня</button>
+      <button id="applyBtn" class="btn-primary">Применить</button>
+      <div class="view-switch">
+        <button id="viewWeek" class="btn-secondary">Неделя</button>
+        <button id="view2Week" class="btn-secondary">2 недели</button>
+        <button id="viewMonth" class="btn-secondary">Месяц</button>
+      </div>
+    </div>
+    <div id="selectedRange" class="muted"></div>
+    <div id="calendar" class="calendar-shell"></div>
+  </div>
+<script>
+const HOUR_H = 52;
+const DATA_URL = "./data/bookings.json";
+let currentPreset = 14;
+function pad(n){ return String(n).padStart(2,'0'); }
+function isoDateUTC(d){ return `${d.getUTCFullYear()}-${pad(d.getUTCMonth()+1)}-${pad(d.getUTCDate())}`; }
+function parseIso(iso){ return new Date(iso + "Z"); }
+function parseDateInput(v){ if(!v) return null; const [y,m,d] = v.split("-").map(Number); return new Date(Date.UTC(y,m-1,d)); }
+function dayKeyFromDate(d){ return isoDateUTC(d); }
+function minutesFromStartOfDay(d){ return d.getUTCHours()*60 + d.getUTCMinutes(); }
+function weekStart(date){ const d = new Date(Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate())); const w = d.getUTCDay(); d.setUTCDate(d.getUTCDate() - ((w + 6) % 7)); return d; }
+function fmtWeekTitle(start){ const end = new Date(start.getTime() + 6*24*3600*1000); return `${pad(start.getUTCDate())}.${pad(start.getUTCMonth()+1)}.${start.getUTCFullYear()} - ${pad(end.getUTCDate())}.${pad(end.getUTCMonth()+1)}.${end.getUTCFullYear()}`; }
+function weekdayShort(i){ return ["пн","вт","ср","чт","пт","сб","вс"][i]; }
+function setPreset(days){ currentPreset=days; ["viewWeek","view2Week","viewMonth"].forEach(id=>document.getElementById(id).classList.remove("active")); if(days===7) viewWeek.classList.add("active"); else if(days===14) view2Week.classList.add("active"); else viewMonth.classList.add("active"); }
+function syncDateRange(days){ const from=parseDateInput(dateFrom.value)||new Date(); const start=new Date(Date.UTC(from.getUTCFullYear(),from.getUTCMonth(),from.getUTCDate())); const end=new Date(start.getTime()+(days-1)*24*3600*1000); dateFrom.value=isoDateUTC(start); dateTo.value=isoDateUTC(end); }
+function applyToday(){ const t=new Date(); dateFrom.value=isoDateUTC(t); syncDateRange(currentPreset); }
+function shiftRange(dir){ const from=parseDateInput(dateFrom.value),to=parseDateInput(dateTo.value); if(!from||!to) return; const span=Math.max(1,Math.floor((to-from)/(24*3600*1000))+1); const step=span*dir; dateFrom.value=isoDateUTC(new Date(from.getTime()+step*24*3600*1000)); dateTo.value=isoDateUTC(new Date(to.getTime()+step*24*3600*1000)); }
+function buildHeadRow(ws){ const row=document.createElement("div"); row.className="grid-head"; const c=document.createElement("div"); c.className="corner"; row.appendChild(c); const today=dayKeyFromDate(new Date()); for(let i=0;i<7;i++){ const d=new Date(ws.getTime()+i*24*3600*1000); const cell=document.createElement("div"); cell.className="day-col-head"; if(dayKeyFromDate(d)===today) cell.classList.add("today"); cell.innerHTML=`<div class="d">${weekdayShort(i)}</div><div class="n">${pad(d.getUTCDate())}.${pad(d.getUTCMonth()+1)}</div>`; row.appendChild(cell);} return row;}
+function buildBody(ws,byDay){ const body=document.createElement("div"); body.className="grid-body"; const times=document.createElement("div"); times.className="times"; for(let h=0;h<=24;h++){ const y=h*HOUR_H; const l=document.createElement("div"); l.className="time-label"; l.style.top=`${y}px`; l.textContent=`${pad(h%24)}:00`; times.appendChild(l);} body.appendChild(times);
+for(let i=0;i<7;i++){ const d=new Date(ws.getTime()+i*24*3600*1000); const key=dayKeyFromDate(d); const col=document.createElement("div"); col.className="day-col";
+for(let q=0;q<=96;q++){ const line=document.createElement("div"); line.className=(q%4===0)?"line-hour":"line-quarter"; line.style.top=`${(q/4)*HOUR_H}px`; col.appendChild(line);}
+const list=(byDay.get(key)||[]).sort((a,b)=>a.start_ts.localeCompare(b.start_ts));
+if(!list.length){ const e=document.createElement("div"); e.className="empty-day"; e.textContent="Свободно"; col.appendChild(e);}
+else{ for(const b of list){ const s=parseIso(b.start_ts), e=parseIso(b.end_ts); const top=(minutesFromStartOfDay(s)/60)*HOUR_H; const h=Math.max(18,((minutesFromStartOfDay(e)-minutesFromStartOfDay(s))/60)*HOUR_H); const ev=document.createElement("div"); ev.className="event"; ev.style.top=`${top}px`; ev.style.height=`${h}px`; ev.innerHTML=`<div class="t">${pad(s.getUTCHours())}:${pad(s.getUTCMinutes())} - ${pad(e.getUTCHours())}:${pad(e.getUTCMinutes())}</div><div class="s">занято</div>`; col.appendChild(ev);} }
+body.appendChild(col);} return body; }
+function render(payload, fromDt, toDt){
+  const root=document.getElementById("calendar"); root.innerHTML="";
+  selectedRange.textContent=`Период: ${pad(fromDt.getUTCDate())}.${pad(fromDt.getUTCMonth()+1)}.${fromDt.getUTCFullYear()} - ${pad(toDt.getUTCDate())}.${pad(toDt.getUTCMonth()+1)}.${toDt.getUTCFullYear()}`;
+  const fromIso = isoDateUTC(fromDt)+"T00:00:00";
+  const toIso = isoDateUTC(toDt)+"T23:59:59";
+  const bookings=(payload.bookings||[]).filter(b=>b.start_ts<=toIso && b.end_ts>=fromIso);
+  const byDay=new Map();
+  for(const b of bookings){ const k=dayKeyFromDate(parseIso(b.start_ts)); if(!byDay.has(k)) byDay.set(k,[]); byDay.get(k).push(b); }
+  const startWeek=weekStart(fromDt);
+  const endExclusive=new Date(toDt.getTime()+24*3600*1000);
+  for(let ws=new Date(startWeek); ws<endExclusive; ws=new Date(ws.getTime()+7*24*3600*1000)){
+    const sec=document.createElement("section"); sec.className="week";
+    const title=document.createElement("div"); title.className="week-title"; title.textContent=fmtWeekTitle(ws);
+    sec.appendChild(title); sec.appendChild(buildHeadRow(ws)); sec.appendChild(buildBody(ws,byDay)); root.appendChild(sec);
+  }
+}
+async function load(){
+  const f=parseDateInput(dateFrom.value), t=parseDateInput(dateTo.value);
+  if(!f || !t || t < f){ alert("Проверьте диапазон дат."); return; }
+  const r=await fetch(`${DATA_URL}?t=${Date.now()}`, {cache:"no-store"});
+  const data=await r.json();
+  render(data, f, t);
+}
+applyBtn.addEventListener("click", load);
+prevBtn.addEventListener("click", ()=>{ shiftRange(-1); load(); });
+nextBtn.addEventListener("click", ()=>{ shiftRange(1); load(); });
+todayBtn.addEventListener("click", ()=>{ applyToday(); load(); });
+viewWeek.addEventListener("click", ()=>{ setPreset(7); syncDateRange(7); load(); });
+view2Week.addEventListener("click", ()=>{ setPreset(14); syncDateRange(14); load(); });
+viewMonth.addEventListener("click", ()=>{ setPreset(31); syncDateRange(31); load(); });
+setPreset(14); applyToday(); load();
+</script>
+</body>
+</html>

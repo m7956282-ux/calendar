@@ -334,3 +334,45 @@ sudo systemctl status vk-rent-calendar
 ```bash
 journalctl -u vk-rent-calendar --since "2 minutes ago" --no-pager -l
 ```
+
+### GitHub Pages: независимый календарь из `data/bookings.json`
+
+Идея: бот обновляет `data/bookings.json` через GitHub API при каждом изменении брони.  
+Страница `index.html` в репозитории читает этот JSON напрямую.
+
+**На сервере (после ssh) — добавить переменные в сервис VK бота (`/etc/systemd/system/vk-rent-bot.service`):**
+
+```bash
+sudo nano /etc/systemd/system/vk-rent-bot.service
+```
+
+Добавьте в блок `[Service]`:
+
+```text
+Environment=CALENDAR_GH_OWNER=m7956282-ux
+Environment=CALENDAR_GH_REPO=calendar
+Environment=CALENDAR_GH_BRANCH=main
+Environment=CALENDAR_GH_PATH=data/bookings.json
+Environment=CALENDAR_GH_TOKEN=github_pat_xxx
+Environment=CALENDAR_SYNC_PAST_DAYS=30
+Environment=CALENDAR_SYNC_FUTURE_DAYS=180
+Environment=CALENDAR_SYNC_TIMEOUT_SECONDS=10
+```
+
+**На сервере (после ssh) — применить и перезапустить:**
+
+```bash
+sudo systemctl daemon-reload
+```
+
+```bash
+sudo systemctl restart vk-rent-bot
+```
+
+**На сервере (после ssh) — проверить логи синка:**
+
+```bash
+journalctl -u vk-rent-bot --since "10 minutes ago" --no-pager -l | grep -E "GitHub calendar sync"
+```
+
+Ожидается строка `GitHub calendar sync ok ...`.

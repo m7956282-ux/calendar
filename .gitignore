@@ -9,7 +9,8 @@ venv/
 env/
 
 # Данные бота (история чатов)
-data/
+data/*
+!data/bookings.json
 *.db
 
 # Python
