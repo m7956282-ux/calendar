@@ -31,7 +31,7 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
-BOT_VERSION = "2026-04-10-calendar-sync-startup-ui"
+BOT_VERSION = "2026-04-10-calendar-sync-startup-ui-v2"
 
 
 VK_TOKEN = os.getenv(
@@ -3830,7 +3830,13 @@ def main() -> None:
             longpoll = VkLongPoll(session, preload_messages=True)
 
             logger.info("VK rent bot started (%s). Waiting for messages...", BOT_VERSION)
-            _sync_calendar_json_to_github("startup")
+            if _calendar_sync_enabled():
+                _sync_calendar_json_to_github("startup")
+            else:
+                logger.info(
+                    "GitHub calendar sync выключен: добавьте в /opt/telegram-bot-vk/.env "
+                    "CALENDAR_GH_TOKEN (PAT с правом contents:write на репозиторий calendar)."
+                )
             backoff = 5
 
             for event in longpoll.listen():
