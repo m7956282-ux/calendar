@@ -78,7 +78,6 @@
       <label>По дату <input id="dateTo" type="date"></label>
       <button id="prevBtn" class="btn-secondary">←</button>
       <button id="nextBtn" class="btn-secondary">→</button>
-      <button id="todayBtn" class="btn-secondary">Сегодня</button>
       <div class="view-switch">
         <button id="viewWeek" class="btn-secondary">Неделя</button>
         <button id="view2Week" class="btn-secondary">2 недели</button>
@@ -145,7 +144,6 @@ dateFrom.addEventListener("keydown", (e)=>{ if(e.key==="Enter"){ e.preventDefaul
 dateTo.addEventListener("keydown", (e)=>{ if(e.key==="Enter"){ e.preventDefault(); load(); } });
 prevBtn.addEventListener("click", ()=>{ shiftRange(-1); load(); });
 nextBtn.addEventListener("click", ()=>{ shiftRange(1); load(); });
-todayBtn.addEventListener("click", ()=>{ applyToday(); load(); });
 viewWeek.addEventListener("click", ()=>{ setPreset(7); syncDateRange(7); load(); });
 view2Week.addEventListener("click", ()=>{ setPreset(14); syncDateRange(14); load(); });
 viewMonth.addEventListener("click", ()=>{ setPreset(31); syncDateRange(31); load(); });
