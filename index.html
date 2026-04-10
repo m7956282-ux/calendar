@@ -16,6 +16,8 @@
     .controls input,.controls button{padding:8px 10px;border-radius:10px;border:1px solid #d5dcef;background:#fff;}
     .controls button{cursor:pointer;font-weight:600;}
     .btn-primary{background:#1f6fff;color:#fff;border-color:#1f6fff;}
+    .btn-primary:hover{filter:brightness(1.05);}
+    .btn-primary:active{transform:translateY(1px);}
     .btn-secondary{background:#fff;color:#334;}
     .view-switch{display:flex;gap:6px;}
     .view-switch button.active{background:#1f6fff;color:#fff;border-color:#1f6fff;}
@@ -61,7 +63,7 @@
       <label>По дату <input id="dateTo" type="date"></label>
       <button id="prevBtn" class="btn-secondary">←</button>
       <button id="nextBtn" class="btn-secondary">→</button>
-      <button id="applyBtn" class="btn-secondary" type="button">Применить</button>
+      <button id="applyBtn" class="btn-primary" type="button">Применить</button>
       <div class="view-switch">
         <button id="viewWeek" class="btn-secondary">Неделя</button>
         <button id="view2Week" class="btn-secondary">2 недели</button>
@@ -75,6 +77,15 @@
 const HOUR_H = 52;
 const DATA_URL = "./data/bookings.json";
 let currentPreset = 14;
+const dateFrom = document.getElementById("dateFrom");
+const dateTo = document.getElementById("dateTo");
+const applyBtn = document.getElementById("applyBtn");
+const prevBtn = document.getElementById("prevBtn");
+const nextBtn = document.getElementById("nextBtn");
+const viewWeek = document.getElementById("viewWeek");
+const view2Week = document.getElementById("view2Week");
+const viewMonth = document.getElementById("viewMonth");
+const selectedRange = document.getElementById("selectedRange");
 function pad(n){ return String(n).padStart(2,'0'); }
 function isoDateUTC(d){ return `${d.getUTCFullYear()}-${pad(d.getUTCMonth()+1)}-${pad(d.getUTCDate())}`; }
 function parseIso(iso){ return new Date(iso + "Z"); }
