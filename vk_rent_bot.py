@@ -31,7 +31,7 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
-BOT_VERSION = "2026-04-10-github-calendar-sync"
+BOT_VERSION = "2026-04-10-calendar-sync-startup-ui"
 
 
 VK_TOKEN = os.getenv(
@@ -74,8 +74,8 @@ CALENDAR_GH_REPO = os.getenv("CALENDAR_GH_REPO", "").strip()
 CALENDAR_GH_BRANCH = os.getenv("CALENDAR_GH_BRANCH", "main").strip() or "main"
 CALENDAR_GH_PATH = os.getenv("CALENDAR_GH_PATH", "data/bookings.json").strip() or "data/bookings.json"
 CALENDAR_GH_TOKEN = os.getenv("CALENDAR_GH_TOKEN", "").strip()
-CALENDAR_SYNC_PAST_DAYS = int(os.getenv("CALENDAR_SYNC_PAST_DAYS", "30"))
-CALENDAR_SYNC_FUTURE_DAYS = int(os.getenv("CALENDAR_SYNC_FUTURE_DAYS", "180"))
+CALENDAR_SYNC_PAST_DAYS = int(os.getenv("CALENDAR_SYNC_PAST_DAYS", "730"))
+CALENDAR_SYNC_FUTURE_DAYS = int(os.getenv("CALENDAR_SYNC_FUTURE_DAYS", "365"))
 CALENDAR_SYNC_TIMEOUT_SECONDS = float(os.getenv("CALENDAR_SYNC_TIMEOUT_SECONDS", "10"))
 
 
@@ -169,6 +169,7 @@ def _calendar_sync_enabled() -> bool:
 def _calendar_json_payload() -> dict:
     """
     Публичный JSON для GitHub Pages (без персональных данных пользователей).
+    Фильтр по датам в Python — чтобы не зависеть от лексикографического сравнения ISO в SQLite.
     """
     now = datetime.now(timezone.utc).replace(tzinfo=None)
     from_dt = now - timedelta(days=max(1, CALENDAR_SYNC_PAST_DAYS))
@@ -180,10 +181,8 @@ def _calendar_json_payload() -> dict:
             """
             SELECT start_ts, end_ts
             FROM bookings
-            WHERE NOT (end_ts < ? OR start_ts > ?)
             ORDER BY start_ts
-            """,
-            (from_dt.isoformat(), to_dt.isoformat()),
+            """
         )
         rows = cur.fetchall()
     finally:
@@ -192,6 +191,8 @@ def _calendar_json_payload() -> dict:
     for r in rows:
         s = _parse_booking_ts(r["start_ts"])
         e = _parse_booking_ts(r["end_ts"])
+        if e < from_dt or s > to_dt:
+            continue
         bookings.append(
             {
                 "start_ts": s.isoformat(),
@@ -3829,6 +3830,7 @@ def main() -> None:
             longpoll = VkLongPoll(session, preload_messages=True)
 
             logger.info("VK rent bot started (%s). Waiting for messages...", BOT_VERSION)
+            _sync_calendar_json_to_github("startup")
             backoff = 5
 
             for event in longpoll.listen():

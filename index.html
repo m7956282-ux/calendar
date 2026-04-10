@@ -15,8 +15,12 @@
     .controls label{display:grid;gap:4px;font-size:12px;color:#556089;}
     .controls input,.controls button{padding:8px 10px;border-radius:10px;border:1px solid #d5dcef;background:#fff;}
     .controls button{cursor:pointer;font-weight:600;}
-    .btn-primary{background:#1f6fff;color:#fff;border-color:#1f6fff;}
-    .btn-primary:hover{filter:brightness(1.05);}
+    /* .controls button перекрывал цвет — явно усиливаем primary */
+    .controls button.btn-primary{background:#1f6fff;color:#fff;border-color:#1557d6;}
+    .controls button.btn-primary:hover{filter:brightness(1.06);}
+    .controls button.btn-primary:active{transform:translateY(1px);}
+    .btn-primary{background:#1f6fff;color:#fff;border-color:#1557d6;}
+    .btn-primary:hover{filter:brightness(1.06);}
     .btn-primary:active{transform:translateY(1px);}
     .btn-secondary{background:#fff;color:#334;}
     .view-switch{display:flex;gap:6px;}
