@@ -36,8 +36,7 @@ BOT_VERSION = "2026-04-10-github-calendar-sync"
 
 VK_TOKEN = os.getenv(
     "VK_RENT_BOT_TOKEN",
-    # подставлен твой токен по умолчанию, чтобы не настраивать переменную среды
-    "REDACTED_VK_TOKEN",
+    "",
 ).strip()
 
 BASE_DIR = Path(__file__).resolve().parent
@@ -62,7 +61,7 @@ WANT_BOT_RECIPIENT_ID = 21476079
 # DeepSeek / администратор
 DEEPSEEK_API_KEY = os.getenv(
     "DEEPSEEK_API_KEY",
-    "REDACTED_DEEPSEEK_KEY",
+    "",
 ).strip()
 DEEPSEEK_BASE_URL = os.getenv("DEEPSEEK_BASE_URL", "https://api.deepseek.com").strip()
 DEEPSEEK_MODEL = os.getenv("DEEPSEEK_MODEL", "deepseek-chat").strip()

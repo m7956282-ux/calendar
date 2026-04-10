@@ -102,8 +102,8 @@
   },
   "telegram": {
     "enabled": true,
-    "token": "REDACTED_TELEGRAM_BOT_TOKEN",
-    "chat_id": "-5272054132"
+    "token": "REPLACE_WITH_NEW_TELEGRAM_BOT_TOKEN",
+    "chat_id": "REPLACE_WITH_CHAT_ID"
   },
   "api_server": {
     "enabled": true,
@@ -111,11 +111,11 @@
     "listen_port": 8080,
     "verbosity": "error",
     "enable_openapi": true,
-    "jwt_secret_key": "REDACTED_JWT_SECRET",
+    "jwt_secret_key": "REPLACE_WITH_NEW_JWT_SECRET",
     "CORS_origins": [],
     "username": "freqtrader",
-    "password": "REDACTED_API_PASSWORD",
-    "ws_token": "REDACTED_WS_TOKEN"
+    "password": "REPLACE_WITH_NEW_PASSWORD",
+    "ws_token": "REPLACE_WITH_NEW_WS_TOKEN"
   },
   "bot_name": "freqtrade",
   "db_url": "sqlite:///user_data/tradesv3_ru.sqlite",

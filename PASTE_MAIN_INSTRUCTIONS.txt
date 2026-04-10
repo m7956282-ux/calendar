@@ -55,8 +55,8 @@ CACHED_DEEPSEEK_WEEK: Dict[Tuple[int, str], str] = {}
 CACHED_DEEPSEEK_DAY: Dict[Tuple[int, str], str] = {}
 CACHED_DEEPSEEK_SOLAR: Dict[Tuple[int, str], str] = {}
 
-# Ключ API DeepSeek (получить на platform.deepseek.com). Подставьте свой ключ ниже:
-DEEPSEEK_API_KEY: Final[str] = os.getenv("DEEPSEEK_API_KEY", "REDACTED_DEEPSEEK_KEY").strip()
+# Ключ API DeepSeek (получить на platform.deepseek.com). Только из env:
+DEEPSEEK_API_KEY: Final[str] = os.getenv("DEEPSEEK_API_KEY", "").strip()
 DEEPSEEK_BASE_URL: Final[str] = "https://api.deepseek.com"
 DEEPSEEK_MODEL: Final[str] = os.getenv("DEEPSEEK_MODEL", "deepseek-chat")
 
