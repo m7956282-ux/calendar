@@ -8,6 +8,7 @@ import base64
 from dataclasses import dataclass
 from datetime import datetime, timedelta, date, time as dtime, timezone
 from pathlib import Path
+from zoneinfo import ZoneInfo
 from collections import defaultdict
 from typing import Dict, Optional
 from urllib import error as urlerror
@@ -31,7 +32,7 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
-BOT_VERSION = "2026-04-10-calendar-sync-startup-ui-v2"
+BOT_VERSION = "2026-04-10-free-dates-calendar-link-v1"
 
 
 VK_TOKEN = os.getenv(
@@ -77,6 +78,13 @@ CALENDAR_GH_TOKEN = os.getenv("CALENDAR_GH_TOKEN", "").strip()
 CALENDAR_SYNC_PAST_DAYS = int(os.getenv("CALENDAR_SYNC_PAST_DAYS", "730"))
 CALENDAR_SYNC_FUTURE_DAYS = int(os.getenv("CALENDAR_SYNC_FUTURE_DAYS", "365"))
 CALENDAR_SYNC_TIMEOUT_SECONDS = float(os.getenv("CALENDAR_SYNC_TIMEOUT_SECONDS", "10"))
+# Время в БД броней — «настенные часы» кабинета (Самара, UTC+4, без DST).
+CALENDAR_TZ = ZoneInfo(os.getenv("CALENDAR_TZ", "Europe/Samara"))
+# Публичная страница календаря (кнопка «Свободные даты»). Переопределение: CALENDAR_PUBLIC_URL в .env
+CALENDAR_PUBLIC_URL = os.getenv(
+    "CALENDAR_PUBLIC_URL",
+    "https://m7956282-ux.github.io/calendar/?v=20260411",
+).strip()
 
 
 def _get_db_connection() -> sqlite3.Connection:
@@ -169,11 +177,12 @@ def _calendar_sync_enabled() -> bool:
 def _calendar_json_payload() -> dict:
     """
     Публичный JSON для GitHub Pages (без персональных данных пользователей).
-    Фильтр по датам в Python — чтобы не зависеть от лексикографического сравнения ISO в SQLite.
+    Naive start_ts/end_ts в БД — локальное время кабинета (Europe/Samara).
+    В JSON отдаём ISO с офсетом +04:00, чтобы календарь не путал с UTC.
     """
-    now = datetime.now(timezone.utc).replace(tzinfo=None)
-    from_dt = now - timedelta(days=max(1, CALENDAR_SYNC_PAST_DAYS))
-    to_dt = now + timedelta(days=max(1, CALENDAR_SYNC_FUTURE_DAYS))
+    now_utc = datetime.now(timezone.utc)
+    from_utc = now_utc - timedelta(days=max(1, CALENDAR_SYNC_PAST_DAYS))
+    to_utc = now_utc + timedelta(days=max(1, CALENDAR_SYNC_FUTURE_DAYS))
     conn = _get_db_connection()
     try:
         cur = conn.cursor()
@@ -189,23 +198,23 @@ def _calendar_json_payload() -> dict:
         conn.close()
     bookings: list[dict] = []
     for r in rows:
-        s = _parse_booking_ts(r["start_ts"])
-        e = _parse_booking_ts(r["end_ts"])
-        if e < from_dt or s > to_dt:
+        s_loc = _booking_ts_to_samara_aware(r["start_ts"])
+        e_loc = _booking_ts_to_samara_aware(r["end_ts"])
+        if e_loc.astimezone(timezone.utc) < from_utc or s_loc.astimezone(timezone.utc) > to_utc:
             continue
         bookings.append(
             {
-                "start_ts": s.isoformat(),
-                "end_ts": e.isoformat(),
-                "duration_minutes": int((e - s).total_seconds() // 60),
+                "start_ts": s_loc.isoformat(),
+                "end_ts": e_loc.isoformat(),
+                "duration_minutes": int((e_loc - s_loc).total_seconds() // 60),
             }
         )
     return {
-        "generated_at": datetime.now(timezone.utc).isoformat(),
-        "timezone": "UTC",
+        "generated_at": now_utc.isoformat(),
+        "timezone": "Europe/Samara",
         "source": "vk_rent_bot",
-        "from_ts": from_dt.isoformat(),
-        "to_ts": to_dt.isoformat(),
+        "from_ts": from_utc.isoformat(),
+        "to_ts": to_utc.isoformat(),
         "bookings": bookings,
     }
 
@@ -372,8 +381,8 @@ def _format_hours_balance(h: float) -> str:
 
 def _parse_booking_ts(ts: str) -> datetime:
     """
-    ISO-строка start_ts/end_ts из БД → наивный datetime в UTC.
-    Нужно, чтобы не смешивать aware/naive при сравнении с «сейчас» и другими наивными датами.
+    ISO-строка start_ts/end_ts из БД → наивный datetime (локальное время кабинета, Самара).
+    Если в строке есть Z/офсет — приводим к наивному UTC для совместимости со старыми записями.
     """
     if not ts:
         return datetime(1970, 1, 1, 0, 0, 0)
@@ -382,6 +391,20 @@ def _parse_booking_ts(ts: str) -> datetime:
     if dt.tzinfo is not None:
         return dt.astimezone(timezone.utc).replace(tzinfo=None)
     return dt
+
+
+def _booking_ts_to_samara_aware(iso: str) -> datetime:
+    """Строка из БД → aware datetime в Europe/Samara (для публичного JSON)."""
+    raw = str(iso).strip()
+    if raw.endswith("Z") or "+00:00" in raw or "-00:00" in raw or re.search(
+        r"[+-]\d{2}:\d{2}$", raw
+    ):
+        t = raw.replace("Z", "+00:00")
+        dt = datetime.fromisoformat(t)
+        if dt.tzinfo is None:
+            dt = dt.replace(tzinfo=timezone.utc)
+        return dt.astimezone(CALENDAR_TZ)
+    return _parse_booking_ts(raw).replace(tzinfo=CALENDAR_TZ)
 
 
 def _parse_vk_user_id_from_text(text: str) -> Optional[int]:
@@ -2281,7 +2304,18 @@ def handle_main_menu(vk, user_id: int, text_raw: str) -> None:
 
     if text == "📆 свободные даты" or text == "свободные даты":
         summary = _free_dates_summary(14)
-        send_message(vk, user_id, summary, keyboard=_main_keyboard_for(user_id))
+        cal_block = ""
+        if CALENDAR_PUBLIC_URL:
+            cal_block = (
+                "\n\nСсылка на календарь занятости кабинета:\n"
+                f"{CALENDAR_PUBLIC_URL}"
+            )
+        send_message(
+            vk,
+            user_id,
+            summary + cal_block,
+            keyboard=_main_keyboard_for(user_id),
+        )
         return
 
     if text == "🎫 мой абонемент" or text == "мой абонемент":
