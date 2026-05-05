@@ -64,9 +64,19 @@
     .day-col:last-child{border-right:none;}
     .line-hour{position:absolute;left:0;right:0;border-top:1px solid #e9edf7;}
     .line-quarter{position:absolute;left:0;right:0;border-top:1px dashed #f1f4fb;}
-    .event{position:absolute;left:6px;right:6px;background:var(--event);border:1px solid var(--event-border);border-radius:10px;padding:5px 6px;overflow:hidden;box-shadow:0 2px 6px rgba(69,93,187,.15);}
-    .event .t{font-size:12px;font-weight:700;}
-    .event .s{font-size:11px;color:#4f5b85;margin-top:2px;}
+    .event{
+      position:absolute;left:6px;right:6px;background:var(--event);border:1px solid var(--event-border);
+      border-radius:10px;padding:4px 6px;overflow-x:hidden;overflow-y:auto;scrollbar-width:thin;
+      box-shadow:0 2px 6px rgba(69,93,187,.15);
+    }
+    .event .t{
+      font-size:12px;font-weight:700;line-height:1.2;
+      overflow-wrap:anywhere;word-break:break-word;
+    }
+    .event .s{
+      font-size:11px;color:#4f5b85;margin-top:2px;line-height:1.25;
+      overflow-wrap:anywhere;word-break:break-word;hyphens:auto;
+    }
     .empty-day{position:absolute;left:8px;right:8px;top:8px;font-size:12px;color:#98a3c2;}
     .cal-build-hint{display:none;font-size:12px;margin:12px 0 0;line-height:1.45;max-width:42em;}
     .cal-cache-details summary{cursor:pointer;font-weight:600;color:#556089;margin-bottom:6px}
@@ -116,7 +126,7 @@
     <div id="selectedRange" class="muted"></div>
     <div id="calendar" class="calendar-shell"></div>
     <div class="cal-build-hint">
-      <p class="muted" style="margin:0 0 6px">Версия страницы: <strong>2026-05-05b</strong> — если дата другая, у вас кэш.</p>
+      <p class="muted" style="margin:0 0 6px">Версия страницы: <strong>2026-05-05c</strong> — если дата другая, у вас кэш.</p>
       <details class="cal-cache-details">
         <summary>Как обновить кэш на телефоне</summary>
         <ul class="cal-cache-list muted">
@@ -269,6 +279,7 @@ function buildBody(ws, byDay){
         const sDiv = document.createElement("div"); sDiv.className = "s";
         const guest = String((b.guest_name != null ? b.guest_name : "") || "").trim();
         sDiv.textContent = guest || "Занято";
+        ev.title = guest ? guest : "Занято";
         ev.appendChild(tDiv); ev.appendChild(sDiv);
         col.appendChild(ev);
       }

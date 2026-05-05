@@ -14,6 +14,15 @@ PORT = int(os.getenv("VK_CALENDAR_PORT", "8090"))
 DEFAULT_DAYS = int(os.getenv("VK_CALENDAR_DEFAULT_DAYS", "14"))
 
 
+def _ensure_bookings_guest_name_column(conn: sqlite3.Connection) -> None:
+    cur = conn.cursor()
+    cur.execute("PRAGMA table_info(bookings)")
+    cols = {row[1] for row in cur.fetchall()}
+    if "guest_name" not in cols:
+        cur.execute("ALTER TABLE bookings ADD COLUMN guest_name TEXT")
+        conn.commit()
+
+
 def _parse_ts(ts: str) -> datetime:
     raw = str(ts or "").strip().replace("Z", "+00:00")
     if not raw:
@@ -28,10 +37,11 @@ def _load_bookings(start_dt: datetime, end_dt: datetime) -> list[dict]:
     conn = sqlite3.connect(DB_PATH)
     conn.row_factory = sqlite3.Row
     try:
+        _ensure_bookings_guest_name_column(conn)
         cur = conn.cursor()
         cur.execute(
             """
-            SELECT id, user_id, start_ts, end_ts
+            SELECT id, user_id, start_ts, end_ts, guest_name
             FROM bookings
             WHERE NOT (end_ts <= ? OR start_ts >= ?)
             ORDER BY start_ts
@@ -43,6 +53,7 @@ def _load_bookings(start_dt: datetime, end_dt: datetime) -> list[dict]:
         for r in rows:
             s = _parse_ts(r["start_ts"])
             e = _parse_ts(r["end_ts"])
+            gn = (r["guest_name"] or "").strip()
             out.append(
                 {
                     "id": int(r["id"]),
@@ -50,6 +61,7 @@ def _load_bookings(start_dt: datetime, end_dt: datetime) -> list[dict]:
                     "start_ts": s.isoformat(),
                     "end_ts": e.isoformat(),
                     "duration_minutes": int((e - s).total_seconds() // 60),
+                    "guest_name": gn,
                 }
             )
         return out
@@ -96,7 +108,11 @@ def _calendar_html() -> str:
     .view-switch button.active{background:#1f6fff;color:#fff;border-color:#1f6fff;}
     .address{font-size:14px;color:#334; margin: 6px 0 10px;}
     .address b{font-weight:700;}
-    .calendar-shell{background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:auto;}
+    .calendar-shell{
+      background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:auto;
+      scrollbar-width:none;-ms-overflow-style:none;
+    }
+    .calendar-shell::-webkit-scrollbar{display:none;height:0;width:0;}
     .week{min-width:980px;border-top:1px solid var(--line);}
     .week:first-child{border-top:none;}
     .week-title{padding:10px 12px;border-bottom:1px solid var(--line);font-weight:600;color:#4c5677;background:#fafbff;}
@@ -117,11 +133,22 @@ def _calendar_html() -> str:
     .event{
       position:absolute;left:6px;right:6px;
       background:var(--event);border:1px solid var(--event-border);
-      border-radius:10px;padding:5px 6px;overflow:hidden;
+      border-radius:10px;padding:4px 6px;
+      overflow-x:hidden;overflow-y:auto;
+      scrollbar-width:thin;
       box-shadow:0 2px 6px rgba(69,93,187,.15);
     }
-    .event .t{font-size:12px;font-weight:700;}
-    .event .s{font-size:11px;color:#4f5b85;margin-top:2px;}
+    .event .t{
+      font-size:12px;font-weight:700;
+      line-height:1.2;
+      overflow-wrap:anywhere;word-break:break-word;
+    }
+    .event .s{
+      font-size:11px;color:#4f5b85;margin-top:2px;
+      line-height:1.25;
+      overflow-wrap:anywhere;word-break:break-word;
+      hyphens:auto;
+    }
     .empty-day{position:absolute;left:8px;right:8px;top:8px;font-size:12px;color:#98a3c2;}
     @media (max-width: 760px){
       h1{font-size:22px;}
@@ -158,6 +185,10 @@ def _calendar_html() -> str:
 const HOUR_H = 52;
 let currentPreset = 14;
 function pad(n){ return String(n).padStart(2,'0'); }
+function escapeHtml(s){
+  const t = String(s ?? '');
+  return t.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+}
 function isoDateUTC(d){ return `${d.getUTCFullYear()}-${pad(d.getUTCMonth()+1)}-${pad(d.getUTCDate())}`; }
 function parseIso(iso){ return new Date(iso + "Z"); }
 function parseDateInput(v){
@@ -272,7 +303,11 @@ function buildBody(weekStartDate, byDay){
         event.className = "event";
         event.style.top = `${top}px`;
         event.style.height = `${height}px`;
-        event.innerHTML = `<div class="t">${pad(s.getUTCHours())}:${pad(s.getUTCMinutes())} - ${pad(e.getUTCHours())}:${pad(e.getUTCMinutes())}</div><div class="s">занято</div>`;
+        const guest = (b.guest_name || '').trim();
+        const sub = escapeHtml(guest || 'Занято');
+        const label = guest ? guest : 'Занято';
+        event.title = label;
+        event.innerHTML = `<div class="t">${pad(s.getUTCHours())}:${pad(s.getUTCMinutes())} - ${pad(e.getUTCHours())}:${pad(e.getUTCMinutes())}</div><div class="s">${sub}</div>`;
         dayCol.appendChild(event);
       }
     }

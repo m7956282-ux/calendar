@@ -83,7 +83,7 @@ CALENDAR_TZ = ZoneInfo(os.getenv("CALENDAR_TZ", "Europe/Samara"))
 # Публичная страница календаря (кнопка «Свободные даты»). Переопределение: CALENDAR_PUBLIC_URL в .env
 CALENDAR_PUBLIC_URL = os.getenv(
     "CALENDAR_PUBLIC_URL",
-    "https://m7956282-ux.github.io/calendar/?v=20260411",
+    "https://m7956282-ux.github.io/calendar/?v=20260505c",
 ).strip()
 
 
