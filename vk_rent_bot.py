@@ -83,8 +83,19 @@ CALENDAR_TZ = ZoneInfo(os.getenv("CALENDAR_TZ", "Europe/Samara"))
 # Публичная страница календаря (кнопка «Свободные даты»). Переопределение: CALENDAR_PUBLIC_URL в .env
 CALENDAR_PUBLIC_URL = os.getenv(
     "CALENDAR_PUBLIC_URL",
-    "https://m7956282-ux.github.io/calendar/?v=20260505c",
+    "https://m7956282-ux.github.io/calendar/?v=20260505d",
 ).strip()
+
+_backfill_guest_names_ran = False
+
+
+def _ensure_bookings_guest_name_column(conn: sqlite3.Connection) -> None:
+    cur = conn.cursor()
+    cur.execute("PRAGMA table_info(bookings)")
+    cols = {row[1] for row in cur.fetchall()}
+    if "guest_name" not in cols:
+        cur.execute("ALTER TABLE bookings ADD COLUMN guest_name TEXT")
+        conn.commit()
 
 
 def _get_db_connection() -> sqlite3.Connection:
@@ -176,7 +187,7 @@ def _calendar_sync_enabled() -> bool:
 
 def _calendar_json_payload() -> dict:
     """
-    Публичный JSON для GitHub Pages (без персональных данных пользователей).
+    Публичный JSON для GitHub Pages (время слотов + имя на календаре).
     Naive start_ts/end_ts в БД — локальное время кабинета (Europe/Samara).
     В JSON отдаём ISO с офсетом +04:00, чтобы календарь не путал с UTC.
     """
@@ -185,10 +196,11 @@ def _calendar_json_payload() -> dict:
     to_utc = now_utc + timedelta(days=max(1, CALENDAR_SYNC_FUTURE_DAYS))
     conn = _get_db_connection()
     try:
+        _ensure_bookings_guest_name_column(conn)
         cur = conn.cursor()
         cur.execute(
             """
-            SELECT start_ts, end_ts
+            SELECT start_ts, end_ts, guest_name
             FROM bookings
             ORDER BY start_ts
             """
@@ -202,13 +214,15 @@ def _calendar_json_payload() -> dict:
         e_loc = _booking_ts_to_samara_aware(r["end_ts"])
         if e_loc.astimezone(timezone.utc) < from_utc or s_loc.astimezone(timezone.utc) > to_utc:
             continue
-        bookings.append(
-            {
-                "start_ts": s_loc.isoformat(),
-                "end_ts": e_loc.isoformat(),
-                "duration_minutes": int((e_loc - s_loc).total_seconds() // 60),
-            }
-        )
+        gname = (r["guest_name"] or "").strip()
+        row = {
+            "start_ts": s_loc.isoformat(),
+            "end_ts": e_loc.isoformat(),
+            "duration_minutes": int((e_loc - s_loc).total_seconds() // 60),
+        }
+        if gname:
+            row["guest_name"] = gname
+        bookings.append(row)
     return {
         "generated_at": now_utc.isoformat(),
         "timezone": "Europe/Samara",
@@ -554,13 +568,23 @@ def _is_free(start_dt: datetime, end_dt: datetime) -> bool:
     return True
 
 
-def _add_booking(user_id: int, start_dt: datetime, end_dt: datetime) -> None:
+def _add_booking(
+    user_id: int,
+    start_dt: datetime,
+    end_dt: datetime,
+    guest_name: Optional[str] = None,
+) -> None:
     conn = _get_db_connection()
     try:
+        _ensure_bookings_guest_name_column(conn)
         cur = conn.cursor()
+        gn = (guest_name or "").strip() or None
         cur.execute(
-            "INSERT INTO bookings (user_id, start_ts, end_ts) VALUES (?, ?, ?)",
-            (user_id, start_dt.isoformat(), end_dt.isoformat()),
+            """
+            INSERT INTO bookings (user_id, start_ts, end_ts, guest_name)
+            VALUES (?, ?, ?, ?)
+            """,
+            (user_id, start_dt.isoformat(), end_dt.isoformat(), gn),
         )
         conn.commit()
     finally:
@@ -1715,6 +1739,34 @@ def _get_vk_name(vk, user_id: int) -> str:
     except Exception as e:
         logger.warning("Не удалось получить имя VK для %s: %s", user_id, e)
     return f"user_id {user_id}"
+
+
+def _backfill_booking_guest_names(vk) -> None:
+    """Заполняет пустые guest_name у старых броней через VK API (один проход при старте процесса)."""
+    conn = _get_db_connection()
+    try:
+        _ensure_bookings_guest_name_column(conn)
+        cur = conn.cursor()
+        cur.execute(
+            """
+            SELECT id, user_id FROM bookings
+            WHERE guest_name IS NULL OR TRIM(guest_name) = ''
+            """
+        )
+        rows = cur.fetchall()
+        if not rows:
+            return
+        for r in rows:
+            uid = int(r["user_id"])
+            name = _get_vk_name(vk, uid)
+            cur.execute(
+                "UPDATE bookings SET guest_name = ? WHERE id = ?",
+                (name, int(r["id"])),
+            )
+        conn.commit()
+        logger.info("Backfill guest_name for %s booking row(s)", len(rows))
+    finally:
+        conn.close()
 
 
 def _hours_almost_equal(a: float, b: float) -> bool:
@@ -3729,6 +3781,7 @@ def handle_message(vk, event) -> None:
             handle_start(vk, user_id)
             return
         remaining = current_hours - float(state.duration_hours)
+        guest_label = _get_vk_name(vk, user_id)
 
         # Кнопка «Нужен перерыв 15 минут» — N слотов по 1 часу, после каждого часа перерыв 15 мин.
         # Следующая бронь возможна только с (конец последнего слота + 15 мин) — обеспечивает _is_free.
@@ -3765,7 +3818,7 @@ def handle_message(vk, event) -> None:
                     return
             _set_user_hours(user_id, remaining)
             for slot_start, slot_end in slots:
-                _add_booking(user_id, slot_start, slot_end)
+                _add_booking(user_id, slot_start, slot_end, guest_label)
             lines = [f"📅 Дата: {_format_date(state.start_dt.date())}\n"]
             for i, (slot_start, slot_end) in enumerate(slots, 1):
                 lines.append(f"⏰ Часть {i}: {slot_start.strftime('%H:%M')}–{slot_end.strftime('%H:%M')}")
@@ -3806,7 +3859,7 @@ def handle_message(vk, event) -> None:
                 state.mode = "choosing_time"
                 return
             _set_user_hours(user_id, remaining)
-            _add_booking(user_id, state.start_dt, state.end_dt)
+            _add_booking(user_id, state.start_dt, state.end_dt, guest_label)
             send_message(
                 vk,
                 user_id,
@@ -3848,6 +3901,7 @@ def handle_message(vk, event) -> None:
 
 
 def main() -> None:
+    global _backfill_guest_names_ran
     if not VK_TOKEN:
         raise RuntimeError("Не указан токен ВК бота. Установите VK_RENT_BOT_TOKEN.")
 
@@ -3860,6 +3914,12 @@ def main() -> None:
         try:
             session = vk_api.VkApi(token=VK_TOKEN)
             vk = session.get_api()
+            if not _backfill_guest_names_ran:
+                try:
+                    _backfill_booking_guest_names(vk)
+                except Exception as e:
+                    logger.warning("guest_name backfill skipped: %s", e)
+                _backfill_guest_names_ran = True
             # preload_messages: иначе Long Poll часто не присылает вложения — скрин оплаты не виден, бот зацикливается
             longpoll = VkLongPoll(session, preload_messages=True)
 
