@@ -42,7 +42,11 @@
       overscroll-behavior-y:auto;
       /* pinch-zoom — чтобы жесты в WebView не блокировались */
       touch-action:pan-x pan-y pinch-zoom;
+      /* полоса прокрутки не показывается, горизонтальная прокрутка жестом/колёсом сохраняется */
+      scrollbar-width:none;
+      -ms-overflow-style:none;
     }
+    .calendar-pan-x::-webkit-scrollbar{display:none;height:0;width:0;}
     .week{min-width:980px;border-top:1px solid var(--line);}
     .week:first-child{border-top:none;}
     .week-title{padding:10px 12px;border-bottom:1px solid var(--line);font-weight:600;color:#4c5677;background:#fafbff;}
@@ -112,7 +116,7 @@
     <div id="selectedRange" class="muted"></div>
     <div id="calendar" class="calendar-shell"></div>
     <div class="cal-build-hint">
-      <p class="muted" style="margin:0 0 6px">Версия страницы: <strong>2026-05-05</strong> — если дата другая, у вас кэш.</p>
+      <p class="muted" style="margin:0 0 6px">Версия страницы: <strong>2026-05-05b</strong> — если дата другая, у вас кэш.</p>
       <details class="cal-cache-details">
         <summary>Как обновить кэш на телефоне</summary>
         <ul class="cal-cache-list muted">
