@@ -112,7 +112,7 @@
     <div id="selectedRange" class="muted"></div>
     <div id="calendar" class="calendar-shell"></div>
     <div class="cal-build-hint">
-      <p class="muted" style="margin:0 0 6px">Версия страницы: <strong>2026-04-11</strong> — если дата другая, у вас кэш.</p>
+      <p class="muted" style="margin:0 0 6px">Версия страницы: <strong>2026-05-05</strong> — если дата другая, у вас кэш.</p>
       <details class="cal-cache-details">
         <summary>Как обновить кэш на телефоне</summary>
         <ul class="cal-cache-list muted">
@@ -260,7 +260,12 @@ function buildBody(ws, byDay){
         const top = (samaraMinutesFromMidnight(s) / 60) * hourH;
         const h = Math.max(16, ((samaraMinutesFromMidnight(e) - samaraMinutesFromMidnight(s)) / 60) * hourH);
         const ev = document.createElement("div"); ev.className = "event"; ev.style.top = `${top}px`; ev.style.height = `${h}px`;
-        ev.innerHTML = `<div class="t">${samaraHM(s)} - ${samaraHM(e)}</div><div class="s">занято</div>`;
+        const tDiv = document.createElement("div"); tDiv.className = "t";
+        tDiv.textContent = `${samaraHM(s)} - ${samaraHM(e)}`;
+        const sDiv = document.createElement("div"); sDiv.className = "s";
+        const guest = String((b.guest_name != null ? b.guest_name : "") || "").trim();
+        sDiv.textContent = guest || "Занято";
+        ev.appendChild(tDiv); ev.appendChild(sDiv);
         col.appendChild(ev);
       }
     }
