@@ -1,814 +1,975 @@
 {
-  "generated_at": "2026-05-05T05:45:26.544427+00:00",
+  "generated_at": "2026-05-05T07:19:50.298164+00:00",
   "timezone": "Europe/Samara",
   "source": "vk_rent_bot",
-  "from_ts": "2024-05-05T05:45:26.544427+00:00",
-  "to_ts": "2027-05-05T05:45:26.544427+00:00",
+  "from_ts": "2024-05-05T07:19:50.298164+00:00",
+  "to_ts": "2027-05-05T07:19:50.298164+00:00",
   "bookings": [
     {
       "start_ts": "2026-03-09T18:15:00+04:00",
       "end_ts": "2026-03-09T19:15:00+04:00",
-      "duration_minutes": 60
+      "duration_minutes": 60,
+      "guest_name": "Снежана Бурцева"
     },
     {
       "start_ts": "2026-03-11T12:15:00+04:00",
       "end_ts": "2026-03-11T13:15:00+04:00",
-      "duration_minutes": 60
+      "duration_minutes": 60,
+      "guest_name": "Снежана Бурцева"
     },
     {
       "start_ts": "2026-03-18T15:30:00+04:00",
       "end_ts": "2026-03-18T16:30:00+04:00",
-      "duration_minutes": 60
+      "duration_minutes": 60,
+      "guest_name": "Снежана Бурцева"
     },
     {
       "start_ts": "2026-03-18T18:00:00+04:00",
       "end_ts": "2026-03-18T19:00:00+04:00",
-      "duration_minutes": 60
+      "duration_minutes": 60,
+      "guest_name": "Снежана Бурцева"
     },
     {
       "start_ts": "2026-03-20T11:00:00+04:00",
       "end_ts": "2026-03-20T12:00:00+04:00",
-      "duration_minutes": 60
+      "duration_minutes": 60,
+      "guest_name": "Алена Жуйкова"
     },
     {
       "start_ts": "2026-03-20T12:15:00+04:00",
       "end_ts": "2026-03-20T13:15:00+04:00",
-      "duration_minutes": 60
+      "duration_minutes": 60,
+      "guest_name": "Алена Жуйкова"
     },
     {
       "start_ts": "2026-03-20T13:30:00+04:00",
       "end_ts": "2026-03-20T14:30:00+04:00",
-      "duration_minutes": 60
+      "duration_minutes": 60,
+      "guest_name": "Алена Жуйкова"
     },
     {
       "start_ts": "2026-03-20T14:45:00+04:00",
       "end_ts": "2026-03-20T15:45:00+04:00",
-      "duration_minutes": 60
+      "duration_minutes": 60,
+      "guest_name": "Алена Жуйкова"
     },
     {
       "start_ts": "2026-03-21T12:15:00+04:00",
       "end_ts": "2026-03-21T13:15:00+04:00",
-      "duration_minutes": 60
+      "duration_minutes": 60,
+      "guest_name": "Снежана Бурцева"
     },
     {
       "start_ts": "2026-03-21T13:30:00+04:00",
       "end_ts": "2026-03-21T14:30:00+04:00",
-      "duration_minutes": 60
+      "duration_minutes": 60,
+      "guest_name": "Снежана Бурцева"
     },
     {
       "start_ts": "2026-03-23T13:00:00+04:00",
       "end_ts": "2026-03-23T14:00:00+04:00",
-      "duration_minutes": 60
+      "duration_minutes": 60,
+      "guest_name": "Алина Авдеева"
     },
     {
       "start_ts": "2026-03-24T19:15:00+04:00",
       "end_ts": "2026-03-24T20:15:00+04:00",
-      "duration_minutes": 60
+      "duration_minutes": 60,
+      "guest_name": "Алина Авдеева"
     },
     {
       "start_ts": "2026-03-25T10:30:00+04:00",
       "end_ts": "2026-03-25T11:30:00+04:00",
-      "duration_minutes": 60
+      "duration_minutes": 60,
+      "guest_name": "Алина Авдеева"
     },
     {
       "start_ts": "2026-03-25T13:00:00+04:00",
       "end_ts": "2026-03-25T14:00:00+04:00",
-      "duration_minutes": 60
+      "duration_minutes": 60,
+      "guest_name": "Снежана Бурцева"
     },
     {
       "start_ts": "2026-03-25T17:15:00+04:00",
       "end_ts": "2026-03-25T19:45:00+04:00",
-      "duration_minutes": 150
+      "duration_minutes": 150,
+      "guest_name": "Виталий Гильмутдинов"
     },
     {
       "start_ts": "2026-03-25T20:00:00+04:00",
       "end_ts": "2026-03-25T21:00:00+04:00",
-      "duration_minutes": 60
+      "duration_minutes": 60,
+      "guest_name": "Алена Опарина"
     },
     {
       "start_ts": "2026-03-26T14:30:00+04:00",
       "end_ts": "2026-03-26T15:30:00+04:00",
-      "duration_minutes": 60
+      "duration_minutes": 60,
+      "guest_name": "Татьяна Караваева"
     },
     {
       "start_ts": "2026-03-26T15:45:00+04:00",
       "end_ts": "2026-03-26T16:45:00+04:00",
-      "duration_minutes": 60
+      "duration_minutes": 60,
+      "guest_name": "Татьяна Караваева"
     },
     {
       "start_ts": "2026-03-26T17:00:00+04:00",
       "end_ts": "2026-03-26T18:00:00+04:00",
-      "duration_minutes": 60
+      "duration_minutes": 60,
+      "guest_name": "Снежана Бурцева"
     },
     {
       "start_ts": "2026-03-26T18:15:00+04:00",
       "end_ts": "2026-03-26T19:15:00+04:00",
-      "duration_minutes": 60
+      "duration_minutes": 60,
+      "guest_name": "Снежана Бурцева"
     },
     {
       "start_ts": "2026-03-28T11:30:00+04:00",
       "end_ts": "2026-03-28T12:30:00+04:00",
-      "duration_minutes": 60
+      "duration_minutes": 60,
+      "guest_name": "Снежана Бурцева"
     },
     {
       "start_ts": "2026-03-28T13:00:00+04:00",
       "end_ts": "2026-03-28T14:00:00+04:00",
-      "duration_minutes": 60
+      "duration_minutes": 60,
+      "guest_name": "Юлия Максимова"
     },
     {
       "start_ts": "2026-03-28T17:30:00+04:00",
       "end_ts": "2026-03-28T18:30:00+04:00",
-      "duration_minutes": 60
+      "duration_minutes": 60,
+      "guest_name": "Алена Опарина"
     },
     {
       "start_ts": "2026-03-30T17:30:00+04:00",
       "end_ts": "2026-03-30T18:30:00+04:00",
-      "duration_minutes": 60
+      "duration_minutes": 60,
+      "guest_name": "Оксана Закирова"
     },
     {
       "start_ts": "2026-03-30T19:00:00+04:00",
       "end_ts": "2026-03-30T20:00:00+04:00",
-      "duration_minutes": 60
+      "duration_minutes": 60,
+      "guest_name": "Алина Авдеева"
     },
     {
       "start_ts": "2026-03-31T10:00:00+04:00",
       "end_ts": "2026-03-31T11:00:00+04:00",
-      "duration_minutes": 60
+      "duration_minutes": 60,
+      "guest_name": "Татьяна Караваева"
     },
     {
       "start_ts": "2026-03-31T11:15:00+04:00",
       "end_ts": "2026-03-31T12:15:00+04:00",
-      "duration_minutes": 60
+      "duration_minutes": 60,
+      "guest_name": "Татьяна Караваева"
     },
     {
       "start_ts": "2026-03-31T12:30:00+04:00",
       "end_ts": "2026-03-31T13:30:00+04:00",
-      "duration_minutes": 60
+      "duration_minutes": 60,
+      "guest_name": "Татьяна Караваева"
     },
     {
       "start_ts": "2026-03-31T13:45:00+04:00",
       "end_ts": "2026-03-31T14:45:00+04:00",
-      "duration_minutes": 60
+      "duration_minutes": 60,
+      "guest_name": "Татьяна Караваева"
     },
     {
       "start_ts": "2026-03-31T15:30:00+04:00",
       "end_ts": "2026-03-31T16:30:00+04:00",
-      "duration_minutes": 60
+      "duration_minutes": 60,
+      "guest_name": "Михаил Бурцев"
     },
     {
       "start_ts": "2026-04-01T10:00:00+04:00",
       "end_ts": "2026-04-01T11:00:00+04:00",
-      "duration_minutes": 60
+      "duration_minutes": 60,
+      "guest_name": "Снежана Бурцева"
     },
     {
       "start_ts": "2026-04-01T11:15:00+04:00",
       "end_ts": "2026-04-01T13:15:00+04:00",
-      "duration_minutes": 120
+      "duration_minutes": 120,
+      "guest_name": "Татьяна Караваева"
     },
     {
       "start_ts": "2026-04-01T20:00:00+04:00",
       "end_ts": "2026-04-01T21:00:00+04:00",
-      "duration_minutes": 60
+      "duration_minutes": 60,
+      "guest_name": "Алена Опарина"
     },
     {
       "start_ts": "2026-04-02T18:00:00+04:00",
       "end_ts": "2026-04-02T19:00:00+04:00",
-      "duration_minutes": 60
+      "duration_minutes": 60,
+      "guest_name": "Антонина Пантюхина"
     },
     {
       "start_ts": "2026-04-04T12:45:00+04:00",
       "end_ts": "2026-04-04T13:45:00+04:00",
-      "duration_minutes": 60
+      "duration_minutes": 60,
+      "guest_name": "Снежана Бурцева"
     },
     {
       "start_ts": "2026-04-04T14:00:00+04:00",
       "end_ts": "2026-04-04T15:00:00+04:00",
-      "duration_minutes": 60
+      "duration_minutes": 60,
+      "guest_name": "Юлия Максимова"
     },
     {
       "start_ts": "2026-04-04T18:00:00+04:00",
       "end_ts": "2026-04-04T19:00:00+04:00",
-      "duration_minutes": 60
+      "duration_minutes": 60,
+      "guest_name": "Антонина Пантюхина"
     },
     {
       "start_ts": "2026-04-05T12:00:00+04:00",
       "end_ts": "2026-04-05T13:00:00+04:00",
-      "duration_minutes": 60
+      "duration_minutes": 60,
+      "guest_name": "Снежана Бурцева"
     },
     {
       "start_ts": "2026-04-06T13:30:00+04:00",
       "end_ts": "2026-04-06T14:30:00+04:00",
-      "duration_minutes": 60
+      "duration_minutes": 60,
+      "guest_name": "Татьяна Караваева"
     },
     {
       "start_ts": "2026-04-06T14:45:00+04:00",
       "end_ts": "2026-04-06T15:45:00+04:00",
-      "duration_minutes": 60
+      "duration_minutes": 60,
+      "guest_name": "Татьяна Караваева"
     },
     {
       "start_ts": "2026-04-06T19:00:00+04:00",
       "end_ts": "2026-04-06T20:00:00+04:00",
-      "duration_minutes": 60
+      "duration_minutes": 60,
+      "guest_name": "Алина Авдеева"
     },
     {
       "start_ts": "2026-04-07T11:00:00+04:00",
       "end_ts": "2026-04-07T12:00:00+04:00",
-      "duration_minutes": 60
+      "duration_minutes": 60,
+      "guest_name": "Снежана Бурцева"
     },
     {
       "start_ts": "2026-04-07T14:30:00+04:00",
       "end_ts": "2026-04-07T15:30:00+04:00",
-      "duration_minutes": 60
+      "duration_minutes": 60,
+      "guest_name": "Снежана Бурцева"
     },
     {
       "start_ts": "2026-04-07T15:45:00+04:00",
       "end_ts": "2026-04-07T16:45:00+04:00",
-      "duration_minutes": 60
+      "duration_minutes": 60,
+      "guest_name": "Снежана Бурцева"
     },
     {
       "start_ts": "2026-04-08T12:00:00+04:00",
       "end_ts": "2026-04-08T13:00:00+04:00",
-      "duration_minutes": 60
+      "duration_minutes": 60,
+      "guest_name": "Снежана Бурцева"
     },
     {
       "start_ts": "2026-04-08T17:45:00+04:00",
       "end_ts": "2026-04-08T19:45:00+04:00",
-      "duration_minutes": 120
+      "duration_minutes": 120,
+      "guest_name": "Светлана Порозова"
     },
     {
       "start_ts": "2026-04-08T20:00:00+04:00",
       "end_ts": "2026-04-08T21:00:00+04:00",
-      "duration_minutes": 60
+      "duration_minutes": 60,
+      "guest_name": "Алена Опарина"
     },
     {
       "start_ts": "2026-04-09T09:30:00+04:00",
       "end_ts": "2026-04-09T10:30:00+04:00",
-      "duration_minutes": 60
+      "duration_minutes": 60,
+      "guest_name": "Татьяна Караваева"
     },
     {
       "start_ts": "2026-04-09T10:45:00+04:00",
       "end_ts": "2026-04-09T11:45:00+04:00",
-      "duration_minutes": 60
+      "duration_minutes": 60,
+      "guest_name": "Татьяна Караваева"
     },
     {
       "start_ts": "2026-04-09T13:00:00+04:00",
       "end_ts": "2026-04-09T14:00:00+04:00",
-      "duration_minutes": 60
+      "duration_minutes": 60,
+      "guest_name": "Алена Опарина"
     },
     {
       "start_ts": "2026-04-09T18:00:00+04:00",
       "end_ts": "2026-04-09T19:00:00+04:00",
-      "duration_minutes": 60
+      "duration_minutes": 60,
+      "guest_name": "Снежана Бурцева"
     },
     {
       "start_ts": "2026-04-09T19:30:00+04:00",
       "end_ts": "2026-04-09T20:30:00+04:00",
-      "duration_minutes": 60
+      "duration_minutes": 60,
+      "guest_name": "Антонина Пантюхина"
     },
     {
       "start_ts": "2026-04-10T16:00:00+04:00",
       "end_ts": "2026-04-10T18:00:00+04:00",
-      "duration_minutes": 120
+      "duration_minutes": 120,
+      "guest_name": "Светлана Наумова"
     },
     {
       "start_ts": "2026-04-11T14:00:00+04:00",
       "end_ts": "2026-04-11T15:00:00+04:00",
-      "duration_minutes": 60
+      "duration_minutes": 60,
+      "guest_name": "Юлия Максимова"
     },
     {
       "start_ts": "2026-04-12T12:00:00+04:00",
       "end_ts": "2026-04-12T13:00:00+04:00",
-      "duration_minutes": 60
+      "duration_minutes": 60,
+      "guest_name": "Снежана Бурцева"
     },
     {
       "start_ts": "2026-04-13T17:30:00+04:00",
       "end_ts": "2026-04-13T18:30:00+04:00",
-      "duration_minutes": 60
+      "duration_minutes": 60,
+      "guest_name": "Оксана Закирова"
     },
     {
       "start_ts": "2026-04-13T18:45:00+04:00",
       "end_ts": "2026-04-13T19:45:00+04:00",
-      "duration_minutes": 60
+      "duration_minutes": 60,
+      "guest_name": "Татьяна Караваева"
     },
     {
       "start_ts": "2026-04-13T20:00:00+04:00",
       "end_ts": "2026-04-13T21:00:00+04:00",
-      "duration_minutes": 60
+      "duration_minutes": 60,
+      "guest_name": "Татьяна Караваева"
     },
     {
       "start_ts": "2026-04-14T12:00:00+04:00",
       "end_ts": "2026-04-14T13:00:00+04:00",
-      "duration_minutes": 60
+      "duration_minutes": 60,
+      "guest_name": "Иван Горохов"
     },
     {
       "start_ts": "2026-04-14T13:45:00+04:00",
       "end_ts": "2026-04-14T14:45:00+04:00",
-      "duration_minutes": 60
+      "duration_minutes": 60,
+      "guest_name": "Снежана Бурцева"
     },
     {
       "start_ts": "2026-04-14T15:00:00+04:00",
       "end_ts": "2026-04-14T16:00:00+04:00",
-      "duration_minutes": 60
+      "duration_minutes": 60,
+      "guest_name": "Татьяна Караваева"
     },
     {
       "start_ts": "2026-04-14T16:15:00+04:00",
       "end_ts": "2026-04-14T17:15:00+04:00",
-      "duration_minutes": 60
+      "duration_minutes": 60,
+      "guest_name": "Татьяна Караваева"
     },
     {
       "start_ts": "2026-04-15T10:00:00+04:00",
       "end_ts": "2026-04-15T11:00:00+04:00",
-      "duration_minutes": 60
+      "duration_minutes": 60,
+      "guest_name": "Снежана Бурцева"
     },
     {
       "start_ts": "2026-04-15T13:30:00+04:00",
       "end_ts": "2026-04-15T14:30:00+04:00",
-      "duration_minutes": 60
+      "duration_minutes": 60,
+      "guest_name": "Оксана Суксина Бережный Психолог"
     },
     {
       "start_ts": "2026-04-15T20:00:00+04:00",
       "end_ts": "2026-04-15T21:00:00+04:00",
-      "duration_minutes": 60
+      "duration_minutes": 60,
+      "guest_name": "Алена Опарина"
     },
     {
       "start_ts": "2026-04-16T14:00:00+04:00",
       "end_ts": "2026-04-16T16:00:00+04:00",
-      "duration_minutes": 120
+      "duration_minutes": 120,
+      "guest_name": "Светлана Наумова"
     },
     {
       "start_ts": "2026-04-16T17:00:00+04:00",
       "end_ts": "2026-04-16T18:00:00+04:00",
-      "duration_minutes": 60
+      "duration_minutes": 60,
+      "guest_name": "Снежана Бурцева"
     },
     {
       "start_ts": "2026-04-16T18:15:00+04:00",
       "end_ts": "2026-04-16T19:15:00+04:00",
-      "duration_minutes": 60
+      "duration_minutes": 60,
+      "guest_name": "Антонина Пантюхина"
     },
     {
       "start_ts": "2026-04-17T10:00:00+04:00",
       "end_ts": "2026-04-17T11:00:00+04:00",
-      "duration_minutes": 60
+      "duration_minutes": 60,
+      "guest_name": "Татьяна Караваева"
     },
     {
       "start_ts": "2026-04-17T11:15:00+04:00",
       "end_ts": "2026-04-17T12:15:00+04:00",
-      "duration_minutes": 60
+      "duration_minutes": 60,
+      "guest_name": "Татьяна Караваева"
     },
     {
       "start_ts": "2026-04-17T12:30:00+04:00",
       "end_ts": "2026-04-17T13:30:00+04:00",
-      "duration_minutes": 60
+      "duration_minutes": 60,
+      "guest_name": "Татьяна Караваева"
     },
     {
       "start_ts": "2026-04-17T19:30:00+04:00",
       "end_ts": "2026-04-17T20:30:00+04:00",
-      "duration_minutes": 60
+      "duration_minutes": 60,
+      "guest_name": "Алина Авдеева"
     },
     {
       "start_ts": "2026-04-18T13:30:00+04:00",
       "end_ts": "2026-04-18T14:30:00+04:00",
-      "duration_minutes": 60
+      "duration_minutes": 60,
+      "guest_name": "Юлия Максимова"
     },
     {
       "start_ts": "2026-04-18T14:45:00+04:00",
       "end_ts": "2026-04-18T15:45:00+04:00",
-      "duration_minutes": 60
+      "duration_minutes": 60,
+      "guest_name": "Антонина Пантюхина"
     },
     {
       "start_ts": "2026-04-18T16:00:00+04:00",
       "end_ts": "2026-04-18T17:00:00+04:00",
-      "duration_minutes": 60
+      "duration_minutes": 60,
+      "guest_name": "Антонина Пантюхина"
     },
     {
       "start_ts": "2026-04-19T10:00:00+04:00",
       "end_ts": "2026-04-19T11:00:00+04:00",
-      "duration_minutes": 60
+      "duration_minutes": 60,
+      "guest_name": "Иван Горохов"
     },
     {
       "start_ts": "2026-04-19T11:30:00+04:00",
       "end_ts": "2026-04-19T12:30:00+04:00",
-      "duration_minutes": 60
+      "duration_minutes": 60,
+      "guest_name": "Иван Горохов"
     },
     {
       "start_ts": "2026-04-19T17:00:00+04:00",
       "end_ts": "2026-04-19T18:00:00+04:00",
-      "duration_minutes": 60
+      "duration_minutes": 60,
+      "guest_name": "Алена Опарина"
     },
     {
       "start_ts": "2026-04-20T10:30:00+04:00",
       "end_ts": "2026-04-20T11:30:00+04:00",
-      "duration_minutes": 60
+      "duration_minutes": 60,
+      "guest_name": "Алена Жуйкова"
     },
     {
       "start_ts": "2026-04-20T12:00:00+04:00",
       "end_ts": "2026-04-20T13:00:00+04:00",
-      "duration_minutes": 60
+      "duration_minutes": 60,
+      "guest_name": "Алена Жуйкова"
     },
     {
       "start_ts": "2026-04-20T13:15:00+04:00",
       "end_ts": "2026-04-20T14:15:00+04:00",
-      "duration_minutes": 60
+      "duration_minutes": 60,
+      "guest_name": "Алена Жуйкова"
     },
     {
       "start_ts": "2026-04-20T14:30:00+04:00",
       "end_ts": "2026-04-20T15:30:00+04:00",
-      "duration_minutes": 60
+      "duration_minutes": 60,
+      "guest_name": "Алена Жуйкова"
     },
     {
       "start_ts": "2026-04-20T15:45:00+04:00",
       "end_ts": "2026-04-20T16:45:00+04:00",
-      "duration_minutes": 60
+      "duration_minutes": 60,
+      "guest_name": "Алена Жуйкова"
     },
     {
       "start_ts": "2026-04-20T17:45:00+04:00",
       "end_ts": "2026-04-20T18:45:00+04:00",
-      "duration_minutes": 60
+      "duration_minutes": 60,
+      "guest_name": "Алена Опарина"
     },
     {
       "start_ts": "2026-04-20T19:00:00+04:00",
       "end_ts": "2026-04-20T20:00:00+04:00",
-      "duration_minutes": 60
+      "duration_minutes": 60,
+      "guest_name": "Алина Авдеева"
     },
     {
       "start_ts": "2026-04-21T13:00:00+04:00",
       "end_ts": "2026-04-21T14:00:00+04:00",
-      "duration_minutes": 60
+      "duration_minutes": 60,
+      "guest_name": "Татьяна Караваева"
     },
     {
       "start_ts": "2026-04-21T14:15:00+04:00",
       "end_ts": "2026-04-21T15:15:00+04:00",
-      "duration_minutes": 60
+      "duration_minutes": 60,
+      "guest_name": "Татьяна Караваева"
     },
     {
       "start_ts": "2026-04-21T15:30:00+04:00",
       "end_ts": "2026-04-21T17:00:00+04:00",
-      "duration_minutes": 90
+      "duration_minutes": 90,
+      "guest_name": "Иван Горохов"
     },
     {
       "start_ts": "2026-04-21T17:30:00+04:00",
       "end_ts": "2026-04-21T18:30:00+04:00",
-      "duration_minutes": 60
+      "duration_minutes": 60,
+      "guest_name": "Иван Горохов"
     },
     {
       "start_ts": "2026-04-22T17:15:00+04:00",
       "end_ts": "2026-04-22T18:15:00+04:00",
-      "duration_minutes": 60
+      "duration_minutes": 60,
+      "guest_name": "Татьяна Караваева"
     },
     {
       "start_ts": "2026-04-22T18:30:00+04:00",
       "end_ts": "2026-04-22T19:30:00+04:00",
-      "duration_minutes": 60
+      "duration_minutes": 60,
+      "guest_name": "Татьяна Караваева"
     },
     {
       "start_ts": "2026-04-22T20:00:00+04:00",
       "end_ts": "2026-04-22T21:00:00+04:00",
-      "duration_minutes": 60
+      "duration_minutes": 60,
+      "guest_name": "Алена Опарина"
     },
     {
       "start_ts": "2026-04-23T10:00:00+04:00",
       "end_ts": "2026-04-23T11:00:00+04:00",
-      "duration_minutes": 60
+      "duration_minutes": 60,
+      "guest_name": "Снежана Бурцева"
     },
     {
       "start_ts": "2026-04-23T17:00:00+04:00",
       "end_ts": "2026-04-23T18:00:00+04:00",
-      "duration_minutes": 60
+      "duration_minutes": 60,
+      "guest_name": "Снежана Бурцева"
     },
     {
       "start_ts": "2026-04-23T18:15:00+04:00",
       "end_ts": "2026-04-23T19:15:00+04:00",
-      "duration_minutes": 60
+      "duration_minutes": 60,
+      "guest_name": "Антонина Пантюхина"
     },
     {
       "start_ts": "2026-04-23T19:30:00+04:00",
       "end_ts": "2026-04-23T20:30:00+04:00",
-      "duration_minutes": 60
+      "duration_minutes": 60,
+      "guest_name": "Снежана Бурцева"
     },
     {
       "start_ts": "2026-04-24T16:00:00+04:00",
       "end_ts": "2026-04-24T17:00:00+04:00",
-      "duration_minutes": 60
+      "duration_minutes": 60,
+      "guest_name": "Снежана Бурцева"
     },
     {
       "start_ts": "2026-04-24T18:30:00+04:00",
       "end_ts": "2026-04-24T20:00:00+04:00",
-      "duration_minutes": 90
+      "duration_minutes": 90,
+      "guest_name": "Дарья Патрикеева"
     },
     {
       "start_ts": "2026-04-25T09:30:00+04:00",
       "end_ts": "2026-04-25T11:30:00+04:00",
-      "duration_minutes": 120
+      "duration_minutes": 120,
+      "guest_name": "Дарья Патрикеева"
     },
     {
       "start_ts": "2026-04-25T12:00:00+04:00",
       "end_ts": "2026-04-25T15:00:00+04:00",
-      "duration_minutes": 180
+      "duration_minutes": 180,
+      "guest_name": "Дарья Патрикеева"
     },
     {
       "start_ts": "2026-04-25T17:30:00+04:00",
       "end_ts": "2026-04-25T18:30:00+04:00",
-      "duration_minutes": 60
+      "duration_minutes": 60,
+      "guest_name": "Алена Опарина"
     },
     {
       "start_ts": "2026-04-26T09:00:00+04:00",
       "end_ts": "2026-04-26T10:00:00+04:00",
-      "duration_minutes": 60
+      "duration_minutes": 60,
+      "guest_name": "Иван Горохов"
     },
     {
       "start_ts": "2026-04-26T10:30:00+04:00",
       "end_ts": "2026-04-26T11:30:00+04:00",
-      "duration_minutes": 60
+      "duration_minutes": 60,
+      "guest_name": "Иван Горохов"
     },
     {
       "start_ts": "2026-04-26T12:00:00+04:00",
       "end_ts": "2026-04-26T13:00:00+04:00",
-      "duration_minutes": 60
+      "duration_minutes": 60,
+      "guest_name": "Снежана Бурцева"
     },
     {
       "start_ts": "2026-04-26T14:00:00+04:00",
       "end_ts": "2026-04-26T15:00:00+04:00",
-      "duration_minutes": 60
+      "duration_minutes": 60,
+      "guest_name": "Снежана Бурцева"
     },
     {
       "start_ts": "2026-04-26T18:00:00+04:00",
       "end_ts": "2026-04-26T19:00:00+04:00",
-      "duration_minutes": 60
+      "duration_minutes": 60,
+      "guest_name": "Юлия Максимова"
     },
     {
       "start_ts": "2026-04-27T11:00:00+04:00",
       "end_ts": "2026-04-27T12:00:00+04:00",
-      "duration_minutes": 60
+      "duration_minutes": 60,
+      "guest_name": "Татьяна Караваева"
     },
     {
       "start_ts": "2026-04-27T15:00:00+04:00",
       "end_ts": "2026-04-27T16:00:00+04:00",
-      "duration_minutes": 60
+      "duration_minutes": 60,
+      "guest_name": "Алена Опарина"
     },
     {
       "start_ts": "2026-04-27T17:30:00+04:00",
       "end_ts": "2026-04-27T18:30:00+04:00",
-      "duration_minutes": 60
+      "duration_minutes": 60,
+      "guest_name": "Оксана Закирова"
     },
     {
       "start_ts": "2026-04-28T11:00:00+04:00",
       "end_ts": "2026-04-28T12:30:00+04:00",
-      "duration_minutes": 90
+      "duration_minutes": 90,
+      "guest_name": "Иван Горохов"
     },
     {
       "start_ts": "2026-04-28T13:30:00+04:00",
       "end_ts": "2026-04-28T14:30:00+04:00",
-      "duration_minutes": 60
+      "duration_minutes": 60,
+      "guest_name": "Иван Горохов"
     },
     {
       "start_ts": "2026-04-29T16:30:00+04:00",
       "end_ts": "2026-04-29T17:30:00+04:00",
-      "duration_minutes": 60
+      "duration_minutes": 60,
+      "guest_name": "Иван Горохов"
     },
     {
       "start_ts": "2026-04-29T18:30:00+04:00",
       "end_ts": "2026-04-29T20:30:00+04:00",
-      "duration_minutes": 120
+      "duration_minutes": 120,
+      "guest_name": "Дарья Патрикеева"
     },
     {
       "start_ts": "2026-04-30T09:30:00+04:00",
       "end_ts": "2026-04-30T10:30:00+04:00",
-      "duration_minutes": 60
+      "duration_minutes": 60,
+      "guest_name": "Иван Горохов"
     },
     {
       "start_ts": "2026-04-30T13:30:00+04:00",
       "end_ts": "2026-04-30T14:30:00+04:00",
-      "duration_minutes": 60
+      "duration_minutes": 60,
+      "guest_name": "Татьяна Караваева"
     },
     {
       "start_ts": "2026-04-30T14:45:00+04:00",
       "end_ts": "2026-04-30T15:45:00+04:00",
-      "duration_minutes": 60
+      "duration_minutes": 60,
+      "guest_name": "Татьяна Караваева"
     },
     {
       "start_ts": "2026-04-30T18:15:00+04:00",
       "end_ts": "2026-04-30T19:15:00+04:00",
-      "duration_minutes": 60
+      "duration_minutes": 60,
+      "guest_name": "Антонина Пантюхина"
     },
     {
       "start_ts": "2026-04-30T20:00:00+04:00",
       "end_ts": "2026-04-30T21:00:00+04:00",
-      "duration_minutes": 60
+      "duration_minutes": 60,
+      "guest_name": "Алена Опарина"
     },
     {
       "start_ts": "2026-05-01T08:00:00+04:00",
       "end_ts": "2026-05-01T09:00:00+04:00",
-      "duration_minutes": 60
+      "duration_minutes": 60,
+      "guest_name": "Татьяна Караваева"
     },
     {
       "start_ts": "2026-05-01T09:15:00+04:00",
       "end_ts": "2026-05-01T10:15:00+04:00",
-      "duration_minutes": 60
+      "duration_minutes": 60,
+      "guest_name": "Татьяна Караваева"
     },
     {
       "start_ts": "2026-05-01T12:00:00+04:00",
       "end_ts": "2026-05-01T13:00:00+04:00",
-      "duration_minutes": 60
+      "duration_minutes": 60,
+      "guest_name": "Снежана Бурцева"
     },
     {
       "start_ts": "2026-05-01T13:15:00+04:00",
       "end_ts": "2026-05-01T14:15:00+04:00",
-      "duration_minutes": 60
+      "duration_minutes": 60,
+      "guest_name": "Татьяна Караваева"
     },
     {
       "start_ts": "2026-05-01T14:30:00+04:00",
       "end_ts": "2026-05-01T15:30:00+04:00",
-      "duration_minutes": 60
+      "duration_minutes": 60,
+      "guest_name": "Татьяна Караваева"
     },
     {
       "start_ts": "2026-05-02T11:00:00+04:00",
       "end_ts": "2026-05-02T12:00:00+04:00",
-      "duration_minutes": 60
+      "duration_minutes": 60,
+      "guest_name": "Татьяна Караваева"
     },
     {
       "start_ts": "2026-05-02T12:15:00+04:00",
       "end_ts": "2026-05-02T13:15:00+04:00",
-      "duration_minutes": 60
+      "duration_minutes": 60,
+      "guest_name": "Татьяна Караваева"
     },
     {
       "start_ts": "2026-05-02T13:45:00+04:00",
       "end_ts": "2026-05-02T14:45:00+04:00",
-      "duration_minutes": 60
+      "duration_minutes": 60,
+      "guest_name": "Иван Горохов"
     },
     {
       "start_ts": "2026-05-02T15:00:00+04:00",
       "end_ts": "2026-05-02T16:00:00+04:00",
-      "duration_minutes": 60
+      "duration_minutes": 60,
+      "guest_name": "Яна Жуйкова"
     },
     {
       "start_ts": "2026-05-03T10:30:00+04:00",
       "end_ts": "2026-05-03T11:30:00+04:00",
-      "duration_minutes": 60
+      "duration_minutes": 60,
+      "guest_name": "Иван Горохов"
     },
     {
       "start_ts": "2026-05-03T18:00:00+04:00",
       "end_ts": "2026-05-03T19:00:00+04:00",
-      "duration_minutes": 60
+      "duration_minutes": 60,
+      "guest_name": "Юлия Максимова"
     },
     {
       "start_ts": "2026-05-04T10:00:00+04:00",
       "end_ts": "2026-05-04T12:00:00+04:00",
-      "duration_minutes": 120
+      "duration_minutes": 120,
+      "guest_name": "Татьяна Караваева"
     },
     {
       "start_ts": "2026-05-04T14:15:00+04:00",
       "end_ts": "2026-05-04T15:15:00+04:00",
-      "duration_minutes": 60
+      "duration_minutes": 60,
+      "guest_name": "Алена Опарина"
     },
     {
       "start_ts": "2026-05-04T15:30:00+04:00",
       "end_ts": "2026-05-04T16:30:00+04:00",
-      "duration_minutes": 60
+      "duration_minutes": 60,
+      "guest_name": "Яна Жуйкова"
     },
     {
       "start_ts": "2026-05-04T16:45:00+04:00",
       "end_ts": "2026-05-04T18:15:00+04:00",
-      "duration_minutes": 90
+      "duration_minutes": 90,
+      "guest_name": "Яна Жуйкова"
     },
     {
       "start_ts": "2026-05-04T18:45:00+04:00",
       "end_ts": "2026-05-04T19:45:00+04:00",
-      "duration_minutes": 60
+      "duration_minutes": 60,
+      "guest_name": "Иван Горохов"
     },
     {
       "start_ts": "2026-05-05T08:30:00+04:00",
       "end_ts": "2026-05-05T09:30:00+04:00",
-      "duration_minutes": 60
+      "duration_minutes": 60,
+      "guest_name": "Татьяна Караваева"
     },
     {
       "start_ts": "2026-05-05T09:45:00+04:00",
       "end_ts": "2026-05-05T10:45:00+04:00",
-      "duration_minutes": 60
+      "duration_minutes": 60,
+      "guest_name": "Татьяна Караваева"
     },
     {
       "start_ts": "2026-05-05T11:00:00+04:00",
       "end_ts": "2026-05-05T12:00:00+04:00",
-      "duration_minutes": 60
+      "duration_minutes": 60,
+      "guest_name": "Татьяна Караваева"
     },
     {
       "start_ts": "2026-05-05T12:15:00+04:00",
       "end_ts": "2026-05-05T13:15:00+04:00",
-      "duration_minutes": 60
+      "duration_minutes": 60,
+      "guest_name": "Татьяна Караваева"
     },
     {
       "start_ts": "2026-05-05T14:00:00+04:00",
       "end_ts": "2026-05-05T15:00:00+04:00",
-      "duration_minutes": 60
+      "duration_minutes": 60,
+      "guest_name": "Ирина Окулова"
     },
     {
       "start_ts": "2026-05-05T16:00:00+04:00",
       "end_ts": "2026-05-05T17:30:00+04:00",
-      "duration_minutes": 90
+      "duration_minutes": 90,
+      "guest_name": "Иван Горохов"
     },
     {
       "start_ts": "2026-05-05T19:00:00+04:00",
       "end_ts": "2026-05-05T20:00:00+04:00",
-      "duration_minutes": 60
+      "duration_minutes": 60,
+      "guest_name": "Алина Авдеева"
     },
     {
       "start_ts": "2026-05-06T17:30:00+04:00",
       "end_ts": "2026-05-06T18:30:00+04:00",
-      "duration_minutes": 60
+      "duration_minutes": 60,
+      "guest_name": "Оксана Закирова"
     },
     {
       "start_ts": "2026-05-06T20:00:00+04:00",
       "end_ts": "2026-05-06T21:00:00+04:00",
-      "duration_minutes": 60
+      "duration_minutes": 60,
+      "guest_name": "Алена Опарина"
     },
     {
       "start_ts": "2026-05-07T12:00:00+04:00",
       "end_ts": "2026-05-07T13:00:00+04:00",
-      "duration_minutes": 60
+      "duration_minutes": 60,
+      "guest_name": "Татьяна Караваева"
     },
     {
       "start_ts": "2026-05-07T13:15:00+04:00",
       "end_ts": "2026-05-07T14:15:00+04:00",
-      "duration_minutes": 60
+      "duration_minutes": 60,
+      "guest_name": "Татьяна Караваева"
     },
     {
       "start_ts": "2026-05-07T17:00:00+04:00",
       "end_ts": "2026-05-07T18:00:00+04:00",
-      "duration_minutes": 60
+      "duration_minutes": 60,
+      "guest_name": "Снежана Бурцева"
     },
     {
       "start_ts": "2026-05-07T18:15:00+04:00",
       "end_ts": "2026-05-07T19:15:00+04:00",
-      "duration_minutes": 60
+      "duration_minutes": 60,
+      "guest_name": "Антонина Пантюхина"
     },
     {
       "start_ts": "2026-05-07T19:30:00+04:00",
       "end_ts": "2026-05-07T20:30:00+04:00",
-      "duration_minutes": 60
+      "duration_minutes": 60,
+      "guest_name": "Алина Авдеева"
     },
     {
       "start_ts": "2026-05-08T12:30:00+04:00",
       "end_ts": "2026-05-08T13:30:00+04:00",
-      "duration_minutes": 60
+      "duration_minutes": 60,
+      "guest_name": "Татьяна Караваева"
     },
     {
       "start_ts": "2026-05-08T13:45:00+04:00",
       "end_ts": "2026-05-08T14:45:00+04:00",
-      "duration_minutes": 60
+      "duration_minutes": 60,
+      "guest_name": "Татьяна Караваева"
     },
     {
       "start_ts": "2026-05-08T15:00:00+04:00",
       "end_ts": "2026-05-08T16:00:00+04:00",
-      "duration_minutes": 60
+      "duration_minutes": 60,
+      "guest_name": "Иван Горохов"
     },
     {
       "start_ts": "2026-05-08T17:30:00+04:00",
       "end_ts": "2026-05-08T19:00:00+04:00",
-      "duration_minutes": 90
+      "duration_minutes": 90,
+      "guest_name": "Дарья Патрикеева"
     },
     {
       "start_ts": "2026-05-10T12:00:00+04:00",
       "end_ts": "2026-05-10T13:00:00+04:00",
-      "duration_minutes": 60
+      "duration_minutes": 60,
+      "guest_name": "Снежана Бурцева"
     },
     {
       "start_ts": "2026-05-11T13:30:00+04:00",
       "end_ts": "2026-05-11T14:30:00+04:00",
-      "duration_minutes": 60
+      "duration_minutes": 60,
+      "guest_name": "Оксана Суксина Бережный Психолог"
     },
     {
       "start_ts": "2026-05-12T17:00:00+04:00",
       "end_ts": "2026-05-12T18:00:00+04:00",
-      "duration_minutes": 60
+      "duration_minutes": 60,
+      "guest_name": "Иван Горохов"
     },
     {
       "start_ts": "2026-05-14T18:15:00+04:00",
       "end_ts": "2026-05-14T19:15:00+04:00",
-      "duration_minutes": 60
+      "duration_minutes": 60,
+      "guest_name": "Антонина Пантюхина"
     },
     {
       "start_ts": "2026-05-16T12:00:00+04:00",
       "end_ts": "2026-05-16T13:00:00+04:00",
-      "duration_minutes": 60
+      "duration_minutes": 60,
+      "guest_name": "Снежана Бурцева"
     },
     {
       "start_ts": "2026-05-16T13:15:00+04:00",
       "end_ts": "2026-05-16T14:15:00+04:00",
-      "duration_minutes": 60
+      "duration_minutes": 60,
+      "guest_name": "Снежана Бурцева"
     },
     {
       "start_ts": "2026-05-25T15:30:00+04:00",
       "end_ts": "2026-05-25T16:30:00+04:00",
-      "duration_minutes": 60
+      "duration_minutes": 60,
+      "guest_name": "Яна Жуйкова"
     },
     {
       "start_ts": "2026-05-25T16:45:00+04:00",
       "end_ts": "2026-05-25T18:15:00+04:00",
-      "duration_minutes": 90
+      "duration_minutes": 90,
+      "guest_name": "Яна Жуйкова"
     },
     {
       "start_ts": "2026-05-29T18:30:00+04:00",
       "end_ts": "2026-05-29T19:30:00+04:00",
-      "duration_minutes": 60
+      "duration_minutes": 60,
+      "guest_name": "Яна Жуйкова"
     }
   ]
 }
